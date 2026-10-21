@@ -314,9 +314,9 @@ header .titulo h1 { flex: none; }
 .modo2 p { margin: 0; font-family: var(--f-texto); font-size: 1.08rem; line-height: 1.5; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chips span { padding: 6px 12px; border-radius: 999px; background: var(--azul-suave); color: var(--azul); font-size: 0.9rem; }
-.fichas { border-top: 1px solid var(--linea); padding-top: 12px; display: flex; flex-direction: column; gap: 4px; }
-.fichas small { font-family: var(--f-dato); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gris); }
-.fichas span { font-family: var(--f-texto); }
+.fichas-portada { border-top: 1px solid var(--linea); padding-top: 12px; display: flex; flex-direction: column; gap: 4px; }
+.fichas-portada small { font-family: var(--f-dato); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gris); }
+.fichas-portada span { font-family: var(--f-texto); }
 .linea-t { display: grid; grid-template-columns: 4.6em 1fr; margin: 0; }
 .linea-t dt, .linea-t dd { margin: 0; padding: 9px 0; border-bottom: 1px solid var(--linea); }
 .linea-t dt { font-family: var(--f-dato); font-size: 0.85rem; color: var(--gris); padding-top: 11px; }
@@ -383,6 +383,9 @@ header .titulo h1 { flex: none; }
 .temas-chips button.ok { border-color: var(--verde); color: var(--verde); }
 .temas-chips button[aria-pressed="true"] { background: var(--azul-suave); border-color: var(--azul); color: var(--azul); }
 .leyenda { display: flex; flex-wrap: wrap; gap: 10px 16px; font-size: 0.78rem; color: var(--gris); }
+/* Idioma: botón ES/EN */
+.idioma { all: unset; cursor: pointer; flex: none; font: 600 0.8rem var(--f-dato); color: var(--azul); border: 1.5px solid var(--azul); border-radius: 8px; padding: 6px 8px; min-width: 24px; text-align: center; }
+.idioma:focus-visible { outline: 3px solid var(--azul); outline-offset: 2px; }
 /* Opinión: cuestionario corto que llega solo a la planilla del proyecto (solo en la web). */
 .opinar { all: unset; cursor: pointer; align-self: center; padding: 12px 8px; font-weight: 500; color: var(--azul); text-decoration: underline; text-underline-offset: 3px; }
 .opinar.chico { font-size: 0.85rem; color: var(--gris); }
@@ -398,6 +401,7 @@ header .titulo h1 { flex: none; }
   <header>
     <button class="volver" id="volver" type="button" hidden><span aria-hidden="true">‹</span> <span id="volver-t">Inicio</span></button>
     <div class="titulo"><img class="marca" id="marca" alt="" hidden><h1>Mathlas</h1></div>
+    <button class="idioma" id="idioma" type="button" aria-label="Change language to English">EN</button>
     <div class="estado" id="estado">cargando…</div>
   </header>
   <main id="main"><div class="vista" id="vista"></div></main>
@@ -671,54 +675,1277 @@ var PAQUETE_INICIAL = {"formato":"mh-paquete-1","generado":"2026-10-21T13:32:14.
    Cada flecha: de dónde viene; fuente = la dice el propio artículo; si no, es una idea nuestra.
    Fechas verificadas en la fuente original (libreta-de-metro/docs/fuentes-historia.md). Pendiente: revisión de la autora. */
 var GENEALOGIA = {
-  ramas: [["neuronas", "Neuronas"], ["vision", "Visión"], ["lenguaje", "Lenguaje"], ["premios", "Premios"], ["agentes", "Agentes"]],
+  ramas: [["neuronas", "Neuronas", "Neurons"], ["vision", "Visión", "Vision"], ["lenguaje", "Lenguaje", "Language"], ["premios", "Premios", "Rewards"], ["agentes", "Agentes", "Agents"]],
   hitos: [
-    { id: "mp", an: "1943", nom: "Neurona lógica", quien: "McCulloch y Pitts", rama: "neuronas", cap: 1, temas: ["demostraciones"], txt: "Una neurona que suma y dispara si llega a un umbral: lógica hecha con neuronas." },
-    { id: "hebb", an: "1949", nom: "Hebb", quien: "Hebb", rama: "neuronas", cap: 2, temas: ["al_vectores"], txt: "Las que se activan juntas se conectan: aprender es cambiar conexiones." },
-    { id: "nash", an: "1950", nom: "Equilibrio", quien: "Nash", rama: "agentes", cap: 9, temas: ["juegos_clasicos"], txt: "Cuando cada uno juega lo mejor contra lo que hacen los demás, nadie quiere cambiar solo." },
-    { id: "bellman", an: "1957", nom: "Bellman", quien: "Bellman", rama: "premios", cap: 6, temas: ["markov"], txt: "Programación dinámica: el valor de un estado se arma con el premio de ahora y el valor de lo que sigue." },
-    { id: "perceptron", an: "1958", nom: "Perceptrón", quien: "Rosenblatt", rama: "neuronas", cap: 3, temas: ["al_producto_interno"], txt: "Una neurona con pesos que se corrigen solos cuando se equivoca." },
-    { id: "hubel", an: "1959", nom: "Corteza visual", quien: "Hubel y Wiesel", rama: "vision", cap: null, temas: [], txt: "Neuronas del gato que responden a bordes con una orientación, cada una en su pedacito de la vista (1959–1962; Nobel 1981)." },
-    { id: "adaline", an: "1960", nom: "ADALINE", quien: "Widrow y Hoff", rama: "neuronas", cap: 4, temas: ["al_proyecciones", "calculo_gradientes"], txt: "Medir cuánto se equivoca y bajar por la pendiente del error." },
-    { id: "minsky", an: "1969", nom: "Perceptrons", quien: "Minsky y Papert", rama: "neuronas", cap: null, temas: ["al_producto_interno"], txt: "El libro que muestra lo que una sola capa no puede hacer, como el XOR." },
-    { id: "neocog", an: "1980", nom: "Neocognitrón", quien: "Fukushima", rama: "vision", cap: null, temas: ["al_matrices"], txt: "Una red con la jerarquía de células simples y complejas de la corteza visual." },
-    { id: "backprop", an: "1986", nom: "Retropropagación", quien: "Rumelhart, Hinton y Williams", rama: "neuronas", cap: 5, temas: ["calculo_gradientes", "al_matrices"], txt: "El error viaja hacia atrás y entrena varias capas a la vez." },
-    { id: "lecun", an: "1989", nom: "Filtros compartidos", quien: "LeCun y otros", rama: "vision", cap: null, temas: ["al_matrices", "calculo_gradientes"], txt: "Códigos postales leídos con filtros que se repiten por toda la imagen (el nombre «LeNet» llega en 1995)." },
-    { id: "qlearning", an: "1989", nom: "Q-learning", quien: "Watkins", rama: "premios", cap: 6, temas: ["rl", "markov"], txt: "Aprender cuánto vale cada acción solo probando y recibiendo premios." },
-    { id: "alexnet", an: "2012", nom: "AlexNet", quien: "Krizhevsky, Sutskever y Hinton", rama: "vision", cap: 7, temas: ["al_matrices"], txt: "Una red convolucional grande, entrenada en placas gráficas, gana el concurso de fotos." },
-    { id: "word2vec", an: "2013", nom: "word2vec", quien: "Mikolov y otros", rama: "lenguaje", cap: null, temas: ["al_vectores", "al_producto_interno"], txt: "Cada palabra se vuelve un vector, y las parecidas quedan cerca." },
-    { id: "dqn", an: "2013", nom: "DQN", quien: "Mnih y otros", rama: "premios", cap: null, temas: ["rl", "al_matrices"], txt: "Una red convolucional que aprende a jugar Atari con Q-learning, mirando la pantalla." },
-    { id: "atencion", an: "2014", nom: "Atención", quien: "Bahdanau, Cho y Bengio", rama: "lenguaje", cap: null, temas: ["probabilidad", "al_producto_interno"], txt: "Al traducir, cada palabra busca las partes de la frase original que le importan." },
-    { id: "resnet", an: "2015", nom: "ResNet", quien: "He y otros", rama: "vision", cap: null, temas: ["calculo_gradientes"], txt: "El atajo F(x) + x: cada capa aprende solo lo que le falta a la anterior." },
-    { id: "transformer", an: "2017", nom: "Transformer", quien: "Vaswani y otros", rama: "lenguaje", cap: 8, temas: ["al_producto_interno", "probabilidad", "al_matrices"], txt: "Solo atención: cada palabra mira a todas las demás a la vez." },
-    { id: "hoy", an: "hoy", nom: "Agentes", quien: "", rama: "agentes", cap: 9, temas: ["marl", "juegos_clasicos"], txt: "Agentes que usan transformadores, aprenden con premios y juegan entre ellos." },
+    { id: "mp", an: "1943", nom: "Neurona lógica", quien: "McCulloch y Pitts", rama: "neuronas", cap: 1, temas: ["demostraciones"], txt: "Una neurona que suma y dispara si llega a un umbral: lógica hecha con neuronas.", nom_en: "Logic neuron", txt_en: "A neuron that adds up its inputs and fires if it reaches a threshold: logic built from neurons." },
+    { id: "hebb", an: "1949", nom: "Hebb", quien: "Hebb", rama: "neuronas", cap: 2, temas: ["al_vectores"], txt: "Las que se activan juntas se conectan: aprender es cambiar conexiones.", nom_en: "Hebb", txt_en: "Cells that fire together wire together: learning is changing connections." },
+    { id: "nash", an: "1950", nom: "Equilibrio", quien: "Nash", rama: "agentes", cap: 9, temas: ["juegos_clasicos"], txt: "Cuando cada uno juega lo mejor contra lo que hacen los demás, nadie quiere cambiar solo.", nom_en: "Equilibrium", txt_en: "When everyone plays their best against what the others do, no one wants to change alone." },
+    { id: "bellman", an: "1957", nom: "Bellman", quien: "Bellman", rama: "premios", cap: 6, temas: ["markov"], txt: "Programación dinámica: el valor de un estado se arma con el premio de ahora y el valor de lo que sigue.", nom_en: "Bellman", txt_en: "Dynamic programming: the value of a state is built from the reward now and the value of what comes next." },
+    { id: "perceptron", an: "1958", nom: "Perceptrón", quien: "Rosenblatt", rama: "neuronas", cap: 3, temas: ["al_producto_interno"], txt: "Una neurona con pesos que se corrigen solos cuando se equivoca.", nom_en: "Perceptron", txt_en: "A neuron whose weights correct themselves when it gets something wrong." },
+    { id: "hubel", an: "1959", nom: "Corteza visual", quien: "Hubel y Wiesel", rama: "vision", cap: null, temas: [], txt: "Neuronas del gato que responden a bordes con una orientación, cada una en su pedacito de la vista (1959–1962; Nobel 1981).", nom_en: "Visual cortex", txt_en: "Neurons in the cat's brain that respond to edges at one orientation, each in its own small patch of the visual field (1959–1962; Nobel Prize 1981)." },
+    { id: "adaline", an: "1960", nom: "ADALINE", quien: "Widrow y Hoff", rama: "neuronas", cap: 4, temas: ["al_proyecciones", "calculo_gradientes"], txt: "Medir cuánto se equivoca y bajar por la pendiente del error.", nom_en: "ADALINE", txt_en: "Measure how wrong you are and walk down the slope of the error." },
+    { id: "minsky", an: "1969", nom: "Perceptrons", quien: "Minsky y Papert", rama: "neuronas", cap: null, temas: ["al_producto_interno"], txt: "El libro que muestra lo que una sola capa no puede hacer, como el XOR.", nom_en: "Perceptrons", txt_en: "The book that shows what a single layer cannot do, such as XOR." },
+    { id: "neocog", an: "1980", nom: "Neocognitrón", quien: "Fukushima", rama: "vision", cap: null, temas: ["al_matrices"], txt: "Una red con la jerarquía de células simples y complejas de la corteza visual.", nom_en: "Neocognitron", txt_en: "A network with the hierarchy of simple and complex cells of the visual cortex." },
+    { id: "backprop", an: "1986", nom: "Retropropagación", quien: "Rumelhart, Hinton y Williams", rama: "neuronas", cap: 5, temas: ["calculo_gradientes", "al_matrices"], txt: "El error viaja hacia atrás y entrena varias capas a la vez.", nom_en: "Backpropagation", txt_en: "The error travels backwards and trains several layers at once." },
+    { id: "lecun", an: "1989", nom: "Filtros compartidos", quien: "LeCun y otros", rama: "vision", cap: null, temas: ["al_matrices", "calculo_gradientes"], txt: "Códigos postales leídos con filtros que se repiten por toda la imagen (el nombre «LeNet» llega en 1995).", nom_en: "Shared filters", txt_en: "Zip codes read with filters repeated across the whole image (the name «LeNet» comes in 1995)." },
+    { id: "qlearning", an: "1989", nom: "Q-learning", quien: "Watkins", rama: "premios", cap: 6, temas: ["rl", "markov"], txt: "Aprender cuánto vale cada acción solo probando y recibiendo premios.", nom_en: "Q-learning", txt_en: "Learning how much each action is worth just by trying and getting rewards." },
+    { id: "alexnet", an: "2012", nom: "AlexNet", quien: "Krizhevsky, Sutskever y Hinton", rama: "vision", cap: 7, temas: ["al_matrices"], txt: "Una red convolucional grande, entrenada en placas gráficas, gana el concurso de fotos.", nom_en: "AlexNet", txt_en: "A large convolutional network, trained on graphics cards, wins the photo contest." },
+    { id: "word2vec", an: "2013", nom: "word2vec", quien: "Mikolov y otros", rama: "lenguaje", cap: null, temas: ["al_vectores", "al_producto_interno"], txt: "Cada palabra se vuelve un vector, y las parecidas quedan cerca.", nom_en: "word2vec", txt_en: "Each word becomes a vector, and similar words end up close together." },
+    { id: "dqn", an: "2013", nom: "DQN", quien: "Mnih y otros", rama: "premios", cap: null, temas: ["rl", "al_matrices"], txt: "Una red convolucional que aprende a jugar Atari con Q-learning, mirando la pantalla.", nom_en: "DQN", txt_en: "A convolutional network that learns to play Atari with Q-learning, looking at the screen." },
+    { id: "atencion", an: "2014", nom: "Atención", quien: "Bahdanau, Cho y Bengio", rama: "lenguaje", cap: null, temas: ["probabilidad", "al_producto_interno"], txt: "Al traducir, cada palabra busca las partes de la frase original que le importan.", nom_en: "Attention", txt_en: "When translating, each word looks for the parts of the original sentence that matter to it." },
+    { id: "resnet", an: "2015", nom: "ResNet", quien: "He y otros", rama: "vision", cap: null, temas: ["calculo_gradientes"], txt: "El atajo F(x) + x: cada capa aprende solo lo que le falta a la anterior.", nom_en: "ResNet", txt_en: "The shortcut F(x) + x: each layer learns only what the previous one is missing." },
+    { id: "transformer", an: "2017", nom: "Transformer", quien: "Vaswani y otros", rama: "lenguaje", cap: 8, temas: ["al_producto_interno", "probabilidad", "al_matrices"], txt: "Solo atención: cada palabra mira a todas las demás a la vez.", nom_en: "Transformer", txt_en: "Attention only: each word looks at all the others at once." },
+    { id: "hoy", an: "hoy", nom: "Agentes", quien: "", rama: "agentes", cap: 9, temas: ["marl", "juegos_clasicos"], txt: "Agentes que usan transformadores, aprenden con premios y juegan entre ellos.", nom_en: "Agents", txt_en: "Agents that use transformers, learn from rewards and play with each other." },
   ],
-  /* [de, a, fuente (true = lo dice el artículo), por qué] */
+  /* [de, a, fuente (true = lo dice el artículo), por qué, por qué en inglés] */
   flechas: [
-    ["mp", "perceptron", false, "La misma neurona con umbral, pero con pesos que se aprenden."],
-    ["hebb", "perceptron", false, "Aprender cambiando conexiones."],
-    ["perceptron", "adaline", false, "La misma neurona; corrige con el error antes del umbral."],
-    ["perceptron", "minsky", true, "El libro analiza el perceptrón."],
-    ["adaline", "backprop", false, "Bajar por la pendiente del error, ahora con varias capas."],
-    ["minsky", "backprop", false, "Las capas ocultas resuelven el XOR."],
-    ["hubel", "neocog", true, "Fukushima copia la jerarquía de células simples y complejas."],
-    ["neocog", "lecun", false, "Filtros que se repiten por toda la imagen."],
-    ["backprop", "lecun", true, "El título: «Backpropagation Applied to…»."],
-    ["lecun", "alexnet", true, "AlexNet es una red convolucional del mismo tipo."],
-    ["alexnet", "resnet", false, "Redes convolucionales cada vez más profundas."],
-    ["resnet", "transformer", true, "El Transformer usa conexiones residuales y cita a ResNet (§3.1): por acá las convoluciones son antepasadas del Transformer."],
-    ["backprop", "word2vec", false, "Vectores de palabras aprendidos por gradiente."],
-    ["word2vec", "transformer", false, "Cada palabra entra como vector."],
-    ["atencion", "transformer", true, "Lo cita como «additive attention»."],
-    ["bellman", "qlearning", true, "Q-learning aproxima la ecuación de Bellman."],
-    ["qlearning", "dqn", true, "«Trained with a variant of Q-learning»."],
-    ["alexnet", "dqn", true, "«A convolutional neural network»: un cruce entre visión y premios."],
+    ["mp", "perceptron", false, "La misma neurona con umbral, pero con pesos que se aprenden.", "The same threshold neuron, but with weights that are learned."],
+    ["hebb", "perceptron", false, "Aprender cambiando conexiones.", "Learning by changing connections."],
+    ["perceptron", "adaline", false, "La misma neurona; corrige con el error antes del umbral.", "The same neuron; it corrects with the error before the threshold."],
+    ["perceptron", "minsky", true, "El libro analiza el perceptrón.", "The book analyzes the perceptron."],
+    ["adaline", "backprop", false, "Bajar por la pendiente del error, ahora con varias capas.", "Walking down the slope of the error, now with several layers."],
+    ["minsky", "backprop", false, "Las capas ocultas resuelven el XOR.", "Hidden layers solve XOR."],
+    ["hubel", "neocog", true, "Fukushima copia la jerarquía de células simples y complejas.", "Fukushima copies the hierarchy of simple and complex cells."],
+    ["neocog", "lecun", false, "Filtros que se repiten por toda la imagen.", "Filters repeated across the whole image."],
+    ["backprop", "lecun", true, "El título: «Backpropagation Applied to…».", "The title: «Backpropagation Applied to…»."],
+    ["lecun", "alexnet", true, "AlexNet es una red convolucional del mismo tipo.", "AlexNet is a convolutional network of the same kind."],
+    ["alexnet", "resnet", false, "Redes convolucionales cada vez más profundas.", "Ever deeper convolutional networks."],
+    ["resnet", "transformer", true, "El Transformer usa conexiones residuales y cita a ResNet (§3.1): por acá las convoluciones son antepasadas del Transformer.", "The Transformer uses residual connections and cites ResNet (§3.1): this is how convolutions are ancestors of the Transformer."],
+    ["backprop", "word2vec", false, "Vectores de palabras aprendidos por gradiente.", "Word vectors learned by gradient descent."],
+    ["word2vec", "transformer", false, "Cada palabra entra como vector.", "Each word comes in as a vector."],
+    ["atencion", "transformer", true, "Lo cita como «additive attention».", "It cites it as «additive attention»."],
+    ["bellman", "qlearning", true, "Q-learning aproxima la ecuación de Bellman.", "Q-learning approximates the Bellman equation."],
+    ["qlearning", "dqn", true, "«Trained with a variant of Q-learning».", "«Trained with a variant of Q-learning»."],
+    ["alexnet", "dqn", true, "«A convolutional neural network»: un cruce entre visión y premios.", "«A convolutional neural network»: a crossing between vision and rewards."],
     ["transformer", "hoy", false, ""],
     ["dqn", "hoy", false, ""],
     ["nash", "hoy", false, ""],
   ],
 };
 if (typeof module !== "undefined") module.exports = GENEALOGIA;
+
+</script>
+<script>
+/* Inglés de la interfaz de Mathlas: exact (texto entero), frag (pedazos de frases armadas por el código), pat (con números).
+   El castellano es el original; si un texto nuevo no está acá, se ve en castellano. */
+window.MATHLAS_EN = {
+"exact": {
+"(la rayita). Cuantas más tiradas, más cerca.": "(the little line). The more flips, the closer it gets.",
+"(lo arma /cierre en mathh/movil y lo pasás al teléfono como quieras)": "(/cierre builds it in mathh/movil and you move it to your phone however you like)",
+"(te quedan": "(you have",
+"Comprobalo acá abajo.": "Check it below.",
+"Lo ideal: «segura» cerca del 100 %.": "Ideally: «sure» close to 100 %.",
+"Los ejercicios donde aparece todavía no están abiertos.": "The exercises where it shows up aren't open yet.",
+"Misma recta: el producto interno es el máximo posible (o el mínimo, si apuntan al revés).": "Same line: the dot product is as large as it can be (or as small, if they point opposite ways).",
+"Ya lo venciste.": "You already beat it.",
+"a la computadora": "to the computer",
+"ahora": "now",
+"capítulos": "chapters",
+"caras": "heads",
+"completo: venciste al jefe": "complete: you beat the boss",
+"correctas": "correct",
+"de 4 filas; la fórmula es verdadera en": "of 4 rows; the formula is true in",
+"de ellas.": "of them.",
+"donde suele aparecer.": "where it usually shows up.",
+"día": "day",
+"días": "days",
+"ejercicio": "exercise",
+"ejercicio:": "exercise:",
+"ejercicios": "exercises",
+"ejercicios no pasaron su propio control y quedaron fuera.": "exercises didn't pass their own check and were left out.",
+"ejercicios,": "exercises,",
+"ejercicios:": "exercises:",
+"fallo": "mistake",
+"fallos": "mistakes",
+"hitos en": "milestones in",
+"intento": "attempt",
+"intentos": "attempts",
+"intentos del registro.": "attempts in the log.",
+"intentos del teléfono ya están en mh.": "attempts from the phone are already in mh.",
+"intentos. En la computadora, dejalo en Descargas y hacé /cierre. Siguen contando aquí hasta que cargues el próximo paquete.": "attempts. On the computer, put it in Downloads and run /cierre. They keep counting here until you load the next package.",
+"para 2.": "for 2.",
+"paso": "step",
+"pasos": "steps",
+"ramas": "branches",
+"repaso para hoy": "review for today",
+"repasos para hoy": "reviews for today",
+"repasos vencidos": "overdue reviews",
+"repasos vencidos (el máximo es": "overdue reviews (the maximum is",
+"repasos vencidos. No hay temas nuevos hasta bajarlos.": "overdue reviews. No new topics until you bring them down.",
+"sin ninguna.": "with none.",
+"sin pasar a mh": "not yet in mh",
+"sin ver.": "not seen yet.",
+"sueltos,": "standalone,",
+"tiradas:": "flips:",
+"vencidos,": "overdue,",
+"y confirmá.": "and confirm.",
+"y mirá cómo la frecuencia se acerca a la rayita.": "and watch the frequency get closer to the little line.",
+"y se da vuelta.": "and flips over.",
+"· Pide:": "· Requires:",
+"· se hace en el modo historia": "· done in Story mode",
+"· se hace en la computadora": "· done on the computer",
+"· vencía": "· was due",
+"· ves todo resuelto, no cuenta para tu progreso": "· you see everything solved; it doesn't count toward your progress",
+"· ángulo": "· angle",
+"Ángulo recto: u · v = 0, son ortogonales.": "Right angle: u · v = 0, they are orthogonal.",
+"! Está en tu caja (Mapa).": "! It's in your box (Map).",
+"! Queda en tu bestiario.": "! It stays in your bestiary.",
+"). No hay ejercicios nuevos hasta bajarlos.": "). No new exercises until you bring them down.",
+"). Probá de nuevo en un rato.": "). Try again in a little while.",
+", con capítulo": ", with chapter",
+", faltan": ", missing",
+", matemática dominada": ", math mastered",
+", pide": ", requires",
+", sin capítulo": ", no chapter",
+", suelto": ", standalone",
+", vencido": ", overdue",
+"- - - idea nuestra": "- - - our idea",
+"3 pistas": "3 hints",
+"7 capítulos": "7 chapters",
+": da": ": gives",
+": el cuadrado se aplastó en una recta. A no tiene inversa y su rango es 1.": ": the square got flattened into a line. A has no inverse and its rank is 1.",
+": el área del cuadrado se multiplica por": ": the area of the square is multiplied by",
+": esta vez ganó él": ": this time it won",
+": falta acertar algo de": ": you still need to get something right in",
+": se abre al": ": opens at",
+": se abre cuando domines": ": opens when you master",
+": se abre en el recorrido": ": opens along the path",
+": suma": ": sum",
+": todavía no hay ejercicios de este tema en el teléfono. Se practica en la computadora con mh.": ": there are no exercises for this topic on the phone yet. You practice it on the computer with mh.",
+": todavía no hay suficientes ejercicios en el teléfono para este jefe.": ": there aren't enough exercises on the phone for this boss yet.",
+": ya lo abriste; lo estoy construyendo.": ": you already opened it; I'm building it.",
+"; cuando dudás, el": "; when you're not sure,",
+"; la probabilidad es": "; the probability is",
+"ADALINE, de Widrow y Hoff": "ADALINE, by Widrow and Hoff",
+"Abierto, en construcción": "Open, under construction",
+"Abrir el capítulo": "Open chapter",
+"Abrí esta página en": "Open this page in",
+"Agentes": "Agents",
+"Agregar a inicio": "Add to Home Screen",
+"Ahora no hay conexión: tu opinión queda guardada y se manda sola la próxima vez que abras Mathlas.": "No connection right now: your feedback is saved and will be sent automatically the next time you open Mathlas.",
+"Algo negativo": "Something negative",
+"Algo positivo": "Something positive",
+"Analogía": "Analogy",
+"Antes de comprobar:": "Before checking:",
+"Aparecen cuando un tema tiene definiciones y sus prerrequisitos están dominados.": "They appear when a topic has definitions and its prerequisites are mastered.",
+"Apareció un bicho nuevo:": "A new bug appeared:",
+"Aplastar": "Flatten",
+"Apostaste seguro y acertaste.": "You bet sure and got it right.",
+"Apostaste seguro y no era: esta es una sorpresa, de las que más enseñan.": "You bet sure and it wasn't: this is a surprise, the kind that teaches the most.",
+"Aprende asociaciones: luz y comida": "Learns associations: light and food",
+"Aprende solo a girar hacia la luz y vence al XOR": "Learns on its own to turn toward the light and beats XOR",
+"Aprende un laberinto por premios": "Learns a maze through rewards",
+"Armá tu respuesta con − y +": "Build your answer with − and +",
+"Atención": "Heads up",
+"Av se sale de la recta de v": "Av leaves the line of v",
+"Av se va para otro lado: v no es autovector. Girá v hasta que Av quede alineada.": "Av goes off in another direction: v is not an eigenvector. Turn v until Av lines up.",
+"Avisa cuándo Av queda sobre la misma recta que v, y con qué λ.": "Tells you when Av lands on the same line as v, and with what λ.",
+"A·(1, 1) = (3, 3) = 3·(1, 1): autovector con λ = 3.": "A·(1, 1) = (3, 3) = 3·(1, 1): eigenvector with λ = 3.",
+"Bajar": "Lower",
+"Balanza": "Scale",
+"Balanza de áreas": "Area scale",
+"Bellman y Q-learning": "Bellman and Q-learning",
+"Bestiario": "Bestiary",
+"Bestiario de errores": "Bestiary of mistakes",
+"Bicho sin ver": "Unseen bug",
+"Bloqueo activo:": "Active block:",
+"Bloqueo:": "Block:",
+"Brújula": "Compass",
+"Brújula de autovectores": "Eigenvector compass",
+"Dar otro paso": "Take another step",
+"De la computadora al teléfono": "From the computer to the phone",
+"De la neurona de 1943 a los agentes de hoy, con dibujos y un desafío por capítulo. Se abren a medida que dominás temas del Modo clase.": "From the 1943 neuron to today's agents, with drawings and one challenge per chapter. They open as you master topics in Class mode.",
+"Dejar la caza": "Stop the hunt",
+"Del teléfono a la computadora": "From the phone to the computer",
+"Dice cuánto da cada ecuación en el punto que armás.": "Shows what each equation gives at the point you build.",
+"Disfraz · ¿qué hay debajo?": "Disguise · what's underneath?",
+"Distingue la luz de un reflejo": "Tells light from a reflection",
+"Distingue objetos buenos y malos": "Tells good objects from bad ones",
+"Dominado": "Mastered",
+"Dominado · se apaga en": "Mastered · fades in",
+"Dominar un tema te da una herramienta. Aparece funcionando en los ejercicios de construir de cualquier tema.": "Mastering a topic earns you a tool. It shows up working in the build exercises of any topic.",
+"Dos maneras de": "Two ways to",
+"Dos maneras de practicar": "Two ways to practice",
+"Dos neuronas encendidas a la vez y la conexión entre ellas, que se engrosa": "Two neurons firing at the same time and the connection between them, growing thicker",
+"Dudabas, pero sabías más de lo que creías.": "You weren't sure, but you knew more than you thought.",
+"Dudabas, y tu duda tenía razón.": "You weren't sure, and your doubt was right.",
+"Dudo": "Not sure",
+"Ejercicio": "Exercise",
+"Ejercicios cortos con pistas y fichas que explican cada respuesta. Antes de contestar, apostás: segura o dudo.": "Short exercises with hints and cards that explain each answer. Before answering, you bet: sure or not sure.",
+"Ejercicios cortos de vectores, matrices, probabilidad, juegos de pagos y redes. Antes de responder apostás si estás segura o dudás, y el mapa de temas se marchita si no repasás.": "Short exercises on vectors, matrices, probability, payoff games and networks. Before answering you bet whether you're sure or not, and the topic map fades if you don't review.",
+"Ejercicios disponibles": "Available exercises",
+"Ejercicios y repasos": "Exercises and reviews",
+"El archivo no se puede leer. Elegí movil/mh-paquete.json dentro de la carpeta mathh.": "The file can't be read. Choose movil/mh-paquete.json inside the mathh folder.",
+"El autómata cayó en:": "The robot landed on:",
+"El cuadrado punteado es el original; el naranja, adónde lo lleva tu matriz.": "The dotted square is the original; the orange one is where your matrix takes it.",
+"El enunciado no se entiende": "The question is unclear",
+"El perceptrón": "The perceptron",
+"El perceptrón de Rosenblatt": "Rosenblatt's perceptron",
+"El árbol de la IA": "The AI tree",
+"Elegí": "Choose",
+"Elegí otro tema en el Mapa.": "Choose another topic on the Map.",
+"Elige a qué sensor hacerle caso": "Chooses which sensor to listen to",
+"Empezar a resolver": "Start solving",
+"Empezar con el Modo clase": "Start with Class mode",
+"Empezar de nuevo": "Start over",
+"Empezar la próxima lección": "Start the next lesson",
+"Empezá por el capítulo 1: McCulloch y Pitts, 1943": "Start with chapter 1: McCulloch and Pitts, 1943",
+"Empujar la primera": "Push the first one",
+"Empujá la primera ficha y mirá qué pasa.": "Push the first tile and watch what happens.",
+"En IA": "In AI",
+"En cada casilla: arriba el pago de quien elige fila, abajo el de quien elige columna.": "In each cell: on top, the payoff for whoever picks the row; below, for whoever picks the column.",
+"En curso": "In progress",
+"En dos": "In two",
+"En ninguna": "In none",
+"En total, cuando decís «segura» acertás el": "Overall, when you say «sure» you're right",
+"En una": "In one",
+"Entrar": "Enter",
+"Entrar a Mathlas": "Enter Mathlas",
+"Era de:": "It was from:",
+"Es muy difícil": "It's too hard",
+"Escala": "Scale",
+"Ese archivo no es el paquete de mh. Elegí movil/mh-paquete.json.": "That file isn't the mh package. Choose movil/mh-paquete.json.",
+"Estado": "Status",
+"Estoy segura": "I'm sure",
+"Exactamente 0,5": "Exactly 0.5",
+"Explicaciones": "Explanations",
+"Falta dominar:": "Still to master:",
+"Fase": "Phase",
+"Fila p": "Row p",
+"Girar v ↺ 15°": "Turn v ↺ 15°",
+"Girar v ↻ 15°": "Turn v ↻ 15°",
+"Hacen falta": "You need",
+"Hebb: las que se activan juntas, se conectan": "Hebb: neurons that fire together wire together",
+"Herramientas que se ganan": "Tools you earn",
+"Incorrecto": "Incorrect",
+"Infinitas": "Infinitely many",
+"Inicio": "Home",
+"Instalarla en el iPhone ↓": "Install it on your iPhone ↓",
+"Intentos del teléfono que mh todavía no tiene": "Phone attempts that mh doesn't have yet",
+"Jefe de la Lógica": "Boss of Logic",
+"Jefe de las Flechas": "Boss of Arrows",
+"Jefe de los Ejes": "Boss of Axes",
+"Jefe de los Sistemas": "Boss of Systems",
+"Jefe del Azar": "Boss of Chance",
+"Jefe vencido: volver a jugar": "Boss beaten: play again",
+"Jefe · ¿de qué tema es?": "Boss · which topic is it from?",
+"Jefe:": "Boss:",
+"Jefes": "Bosses",
+"Jefes que mezclan temas": "Bosses that mix topics",
+"Jugar": "Play",
+"Nada para mandar": "Nothing to send",
+"Nada: todas correctas.": "Nothing: all correct.",
+"Neurona biológica con dendritas, soma, axón con mielina y terminales, junto a su versión matemática: cuatro entradas, una suma y una salida": "Biological neuron with dendrites, soma, myelinated axon and terminals, next to its mathematical version: four inputs, a sum and an output",
+"Neurona de McCulloch y Pitts: tres entradas con pesos w1, w2 y w3, una suma, un umbral y una salida": "McCulloch and Pitts neuron: three inputs with weights w1, w2 and w3, a sum, a threshold and an output",
+"Ninguna": "None",
+"Ningún repaso pendiente": "No reviews pending",
+"No es una fila: hay ramas que se cruzan. Tocá un hito para ver de dónde viene y qué matemática pide; tocá un tema para ver qué hitos lo usan.": "It's not a straight line: there are branches that cross. Tap a milestone to see where it comes from and what math it needs; tap a topic to see which milestones use it.",
+"No hace falta ninguna tienda. Se agrega a la pantalla de inicio y se abre como una app.": "No app store needed. It gets added to your home screen and opens like an app.",
+"No hay ejercicios para mirar acá": "No exercises to look at here",
+"No hay intentos pendientes de pasar a la computadora.": "No attempts waiting to go to the computer.",
+"No queda nada de este tema por ahora": "Nothing left for this topic for now",
+"No queda nada para hacer aquí": "Nothing left to do here",
+"No queda nada por ahora en el teléfono. Mandá tus intentos a la computadora y cargá un paquete nuevo de mh.": "Nothing left on the phone for now. Send your attempts to the computer and load a new mh package.",
+"No se mandó nada. Podés volver a intentarlo.": "Nothing was sent. You can try again.",
+"No se pudo armar el archivo:": "Couldn't build the file:",
+"No se pudo guardar el archivo (": "Couldn't save the file (",
+"Opcional": "Optional",
+"Otra cosa": "Something else",
+"Paquete del": "Package from",
+"Para A = [2 1; 1 2], ¿en qué dirección Av sigue sobre la misma recta que v?": "For A = [2 1; 1 2], in which direction does Av stay on the same line as v?",
+"Para empezar mirando: cada ejercicio y desafío resuelto paso a paso, en los dos modos. No cuenta para tu progreso.": "To start by watching: every exercise and challenge solved step by step, in both modes. It doesn't count toward your progress.",
+"Para repasar": "To review",
+"Paralelas": "Parallel",
+"Pedir pista": "Ask for hint",
+"Perceptrón": "Perceptron",
+"Pista": "Hint",
+"Pistas: usaste": "Hints: you used",
+"Podés pasar de una a la otra cuando quieras, desde Inicio.": "You can switch from one to the other whenever you want, from Home.",
+"Por ejemplo: qué respondiste y por qué te parece que estaba bien": "For example: what you answered and why you think it was right",
+"Por qué no las otras": "Why not the others",
+"Practicando": "Practicing",
+"Practicar": "Practice",
+"Predecí primero.": "Predict first.",
+"Predijiste bien.": "You predicted right.",
+"Predijiste «": "You predicted «",
+"Prendido: en los dos modos ves cada ejercicio y desafío resuelto paso a paso. No cuenta para tu progreso.": "On: in both modes you see every exercise and challenge solved step by step. It doesn't count toward your progress.",
+"Primero marcá si estás segura o si dudás.": "First mark whether you're sure or not sure.",
+"Proyector": "Projector",
+"Práctica de matemática para IA": "Math practice for AI",
+"Próxima lección": "Next lesson",
+"Recorrido": "Path",
+"Reflejos cableados a mano": "Hand-wired reflexes",
+"Regla": "Ruler",
+"Repasos": "Reviews",
+"Repasá las tarjetas, o cargá un paquete nuevo de mh para traer ejercicios.": "Review the cards, or load a new mh package to bring in exercises.",
+"Respuesta": "Answer",
+"Retropropagación": "Backpropagation",
+"Retro­propagación": "Back­propagation",
+"Rotación": "Rotation",
+"Salir": "Exit",
+"Se abre el menú Compartir: elegí Drive, correo o lo que uses. En la computadora, guardá el archivo en Descargas y hacé": "The Share menu opens: choose Drive, email or whatever you use. On the computer, save the file in Downloads and run",
+"Se acerca a 1,5": "Gets close to 1.5",
+"Se acerca a 2": "Gets close to 2",
+"Se cortan": "They intersect",
+"Se cortó en la ficha 5: está lejos y la 4 no la alcanza. Sin «cada una tira a la siguiente», la cadena se frena.": "It stopped at tile 5: it's far away and tile 4 can't reach it. Without «each one knocks over the next», the chain stops.",
+"Se gana dominando «": "Earned by mastering «",
+"Se practica en la computadora": "Practiced on the computer",
+"Segura o dudo": "Sure or not sure",
+"Seguís en el": "You're still on",
+"Separar la ficha 5": "Move tile 5 away",
+"Si recién arrancás, el Modo clase es el mejor punto de partida.": "If you're just starting, Class mode is the best place to begin.",
+"Si separás la ficha 5 y empujás la primera, ¿cuántas caen?": "If you move tile 5 away and push the first one, how many fall?",
+"Si sumás 1 + 1/2 + 1/4 + … sin parar nunca, ¿adónde llegás?": "If you add 1 + 1/2 + 1/4 + … and never stop, where do you end up?",
+"Si v forma 90° con u, ¿cuánto da u · v?": "If v makes 90° with u, what is u · v?",
+"Si v queda perpendicular a la recta, ¿cuánto mide su sombra sobre ella?": "If v is perpendicular to the line, how long is its shadow on it?",
+"Siguiente": "Next",
+"Siguiente ejercicio": "Next exercise",
+"Siguiente paso": "Next step",
+"Sin cambio": "No change",
+"Sin pistas en esta lección": "No hints in this lesson",
+"Sin repasos vencidos": "No overdue reviews",
+"Sin tarjetas por ahora": "No cards for now",
+"Solo 4": "Only 4",
+"Solo en p falso, q falso.": "Only when p is false and q is false.",
+"Solución": "Solution",
+"Solución · paso": "Solution · step",
+"Son paralelas: misma inclinación, distinta altura.": "They're parallel: same slope, different height.",
+"Son unos segundos. No pongas tu nombre ni datos personales: no hacen falta.": "It takes a few seconds. Don't include your name or personal details: they aren't needed.",
+"Sorpresas (segura y no era):": "Surprises (sure and it wasn't):",
+"Subir": "Raise",
+"Superficie ondulada, vectores sobre una cuadrícula y una red de nodos conectados": "Wavy surface, vectors on a grid and a network of connected nodes",
+"Sí": "Yes",
+"Tal vez": "Maybe",
+"Tema": "Topic",
+"Tema cortado por hoy:": "Topic paused for today:",
+"Tenela en el iPhone": "Get it on your iPhone",
+"Tirar 10": "Flip 10",
+"Tirar 1000": "Flip 1000",
+"Tirá": "Flip",
+"Tirás una moneda 1000 veces. ¿Qué fracción de caras esperás?": "You flip a coin 1000 times. What fraction of heads do you expect?",
+"Tocá": "Tap",
+"Tocá cada fila para calcularla.": "Tap each row to work it out.",
+"Tocá para ver": "Tap to see",
+"Tocá una tarjeta para ver el enunciado. Las tarjetas no se registran: para que cuente, respondé la pregunta en Practicar.": "Tap a card to see the question. Cards aren't logged: for it to count, answer the question in Practice.",
+"Todavía no apareció. Aparece cuando cometés ese error.": "It hasn't appeared yet. It appears when you make that mistake.",
+"Todavía no tiene capítulo en Mathlas.": "It doesn't have a chapter in Mathlas yet.",
+"Todo": "All",
+"Todo lo que practicás queda guardado en este teléfono. Para que cuente en mh, mandalo a la computadora; para traer ejercicios nuevos y lo hecho en la computadora, cargá el paquete de mh.": "Everything you practice is saved on this phone. For it to count in mh, send it to the computer; to bring in new exercises and what you did on the computer, load the mh package.",
+"Todos los temas": "All topics",
+"Transportador": "Protractor",
+"Tu mapa de temas": "Your topic map",
+"Tu opinión ya llegó. La leemos toda, y con ella decidimos qué mejorar.": "Your feedback arrived. We read all of it, and use it to decide what to improve.",
+"Tu puntería": "Your aim",
+"Tu recorrido": "Your path",
+"Tu respuesta (número; coma o punto)": "Your answer (number; comma or point)",
+"Un autómata en un laberinto visto desde arriba y un premio en la salida": "A robot in a maze seen from above and a reward at the exit",
+"Un autómata que se equivoca": "A robot that makes mistakes",
+"Un ejercicio por parada de metro alcanza.": "One exercise per subway stop is enough.",
+"Un tema queda dominado con 3 ejercicios distintos acertados, en 2 días distintos, el último hace 21 días o menos y sin fallos después. Tocá un tema para practicarlo.": "A topic is mastered with 3 different exercises answered correctly, on 2 different days, the last one 21 days ago or less, and no mistakes after that. Tap a topic to practice it.",
+"Una": "One",
+"Una bolita que baja por un valle hasta el punto más bajo": "A ball rolling down a valley to the lowest point",
+"Una respuesta que cumple:": "An answer that works:",
+"Usar un dado": "Use a die",
+"Usar una moneda": "Use a coin",
+"Varios agentes y equilibrio de Nash": "Multiple agents and Nash equilibrium",
+"Varios autómatas compiten o cooperan": "Several robots compete or cooperate",
+"Ver con filtros": "Seeing with filters",
+"Ver con filtros: las redes convolucionales": "Seeing with filters: convolutional networks",
+"Ver el cierre de la lección": "See the lesson wrap-up",
+"Viene de:": "Comes from:",
+"Volver": "Back",
+"Volver a acercarla": "Bring it back",
+"Volver al mapa": "Back to the map",
+"Volver al primero": "Back to the first one",
+"Volvió": "Came back",
+"Volvé al mapa o practicá todos los temas.": "Go back to the map or practice all topics.",
+"XOR aprendido": "XOR learned",
+"XOR, otra vez": "XOR, again",
+"abrir el capítulo": "open chapter",
+"al día con mh": "up to date with mh",
+"bicho": "bug",
+"borde verde: ya dominás su matemática": "green border: you already master its math",
+"capítulo": "chapter",
+"cos 90° = 0: perpendiculares quiere decir producto interno 0.": "cos 90° = 0: perpendicular means dot product 0.",
+"det = 1·1 − 2·0,5 = 0: el cuadrado queda chato.": "det = 1·1 − 2·0.5 = 0: the square ends up flat.",
+"dominar en Modo clase": "master in Class mode",
+"ecuación": "equation",
+"el dado": "the die",
+"el premio chico": "the small reward",
+"en": "in",
+"explicada jugando": "explained through play",
+"falta": "missing",
+"faltan": "missing",
+"hace": "ago:",
+"la herramienta «": "the tool «",
+"la imagen casi idéntica": "the almost identical image",
+"la moneda": "the coin",
+"las dos": "both",
+"modo historia": "Story mode",
+"nivel": "level",
+"no es un paquete de mh": "isn't an mh package",
+"pesos sin freno": "runaway weights",
+"repaso ·": "review ·",
+"sin ver": "not seen yet",
+"sí": "yes",
+"tres fallos seguidos en": "three mistakes in a row in",
+"v, así que λ =": "v, so λ =",
+"vencer al jefe del capítulo": "beat the boss of chapter",
+"vencido · mejor": "overdue · best",
+"vuelve el": "returns on",
+"x + y = 4 y 2x + 2y = 8 son la misma recta: infinitas soluciones. La segunda ecuación es el doble de la primera, no agrega información.": "x + y = 4 and 2x + 2y = 8 are the same line: infinitely many solutions. The second equation is double the first; it adds no information.",
+"x + y = 4 y x + y = 1 nunca se tocan: el sistema no tiene solución. Los coeficientes son proporcionales (det = 0) pero los resultados no.": "x + y = 4 and x + y = 1 never touch: the system has no solution. The coefficients are proportional (det = 0) but the results are not.",
+"x + y = 4 y x + y = 1: ¿cuántas soluciones tienen juntas?": "x + y = 4 and x + y = 1: how many solutions do they have together?",
+"x + y = 4 y x − y = 0 se cortan en un solo punto, (2, 2): solución única. El determinante de los coeficientes es 1·(−1) − 1·1 = −2, distinto de 0.": "x + y = 4 and x − y = 0 intersect at a single point, (2, 2): a unique solution. The determinant of the coefficients is 1·(−1) − 1·1 = −2, which is not 0.",
+"¡Autovector! Av cae en la misma recta que v: Av =": "Eigenvector! Av lands on the same line as v: Av =",
+"¡Ganaste": "You won",
+"¡Gracias!": "Thank you!",
+"¡Venciste a": "You beat",
+"¡Venciste al": "You beat the",
+"¡enfrentar!": "face it!",
+"·v: misma recta": "·v: same line",
+"¿Algo raro en este ejercicio? Avisanos": "Something off with this exercise? Let us know",
+"¿Cómo seguimos hoy?": "How shall we continue today?",
+"¿En cuántas de las 4 filas es verdadera (p → q) ∧ ¬q?": "In how many of the 4 rows is (p → q) ∧ ¬q true?",
+"¿Qué le agregarías o cambiarías?": "What would you add or change?",
+"¿Qué pasó?": "What happened?",
+"¿Qué tan claras son las explicaciones? (1 = nada, 5 = muy)": "How clear are the explanations? (1 = not at all, 5 = very)",
+"¿Qué tan segura estás?": "How sure are you?",
+"¿Qué tanto te dan ganas de seguir? (1 = nada, 5 = mucho)": "How much do you want to keep going? (1 = not at all, 5 = a lot)",
+"¿Qué te costó o te confundió?": "What was hard or confusing?",
+"¿Qué te pareció Mathlas?": "Tell us what you think of Mathlas",
+"¿Qué tiene de raro este ejercicio?": "What's odd about this exercise?",
+"¿Qué usaste?": "What did you use?",
+"¿Se la recomendarías a alguien que estudia IA?": "Would you recommend it to someone studying AI?",
+"¿quién muerde a quién?": "who bites whom?",
+"Ángulo": "Angle",
+"Árbol": "Tree",
+"Árbol genealógico de la IA con": "Family tree of AI with",
+"Último paquete": "Latest package",
+"η demasiado grande": "η too large",
+"‹ Ejercicio anterior": "‹ Previous exercise",
+"── lo dice el artículo": "── the paper says so",
+"○ punteado: sin capítulo todavía": "○ dotted: no chapter yet",
+"● lleno: tiene capítulo": "● filled: has a chapter",
+"Lógica, conjuntos e inducción": "Logic, sets and induction",
+"Vectores y operaciones": "Vectors and operations",
+"Producto interno y ortogonalidad": "Dot product and orthogonality",
+"Matrices y multiplicación matricial": "Matrices and matrix multiplication",
+"Sistemas de ecuaciones lineales": "Systems of linear equations",
+"Espacios vectoriales, bases e independencia lineal": "Vector spaces, bases and linear independence",
+"Transformaciones lineales": "Linear transformations",
+"Rango, inversa y determinante": "Rank, inverse and determinant",
+"Autovalores y autovectores": "Eigenvalues and eigenvectors",
+"Proyecciones y descomposiciones (SVD)": "Projections and decompositions (SVD)",
+"Probabilidad, condicionamiento y Bayes": "Probability, conditioning and Bayes",
+"Derivadas parciales y gradientes": "Partial derivatives and gradients",
+"Forma normal, extensiva y equilibrio de Nash": "Normal and extensive form, Nash equilibrium",
+"Juegos bayesianos y señalización": "Bayesian games and signaling",
+"Juegos repetidos y reputación": "Repeated games and reputation",
+"Diseño de mecanismos": "Mechanism design",
+"Sistemas dinámicos: puntos fijos y estabilidad": "Dynamical systems: fixed points and stability",
+"Teoría de juegos evolutiva y replicador": "Evolutionary game theory and the replicator",
+"Cadenas de Markov y metaestabilidad": "Markov chains and metastability",
+"Aprendizaje por refuerzo": "Reinforcement learning",
+"Aprendizaje por refuerzo multiagente": "Multi-agent reinforcement learning",
+"Redes, contagio con umbrales y cascadas": "Networks, threshold contagion and cascades",
+"Historia · 1943: la neurona lógica": "Story · 1943: the logic neuron",
+"Historia · 1949: Hebb y el aprendizaje": "Story · 1949: Hebb and learning",
+"Historia · 1958: el perceptrón": "Story · 1958: the perceptron",
+"Historia · 1960: ADALINE y el error medido": "Story · 1960: ADALINE and the measured error",
+"Historia · 1986: la retropropagación": "Story · 1986: backpropagation",
+"Historia · 1957–1989: Bellman y Q-learning": "Story · 1957–1989: Bellman and Q-learning",
+"Historia · 2012: ver con filtros": "Story · 2012: seeing with filters",
+"Historia · 2017: la atención": "Story · 2017: attention",
+"Historia · Hoy: varios agentes y Nash": "Story · Today: many agents and Nash",
+"Modo historia": "Story mode",
+"La IA, capítulo por capítulo": "AI, chapter by chapter",
+"Modo clase": "Class mode",
+"Con las reglas de mh": "With mh's rules",
+"Modo ayuda": "Help mode",
+"Contanos qué te pareció": "Tell us what you think",
+"Secciones": "Sections",
+"Tarjetas": "Cards",
+"Mapa": "Map",
+"Computadora": "Computer",
+"Matemática para IA · de a ratos": "Math for AI · a little at a time",
+"La matemática de la IA,": "The math behind AI,",
+"Mathlas es una app para practicar, desde el teléfono, la matemática que hay detrás de la inteligencia artificial: vectores, probabilidad, juegos, neuronas.": "Mathlas is an app to practice, on your phone, the math behind artificial intelligence: vectors, probability, games, neurons.",
+"La neurona de 1943 y la fórmula que todavía usa cada red neuronal. Es el primer capítulo del Modo historia.": "The 1943 neuron and the formula every neural network still uses. It is the first chapter of Story mode.",
+"Construir vectores y neuronas": "Build vectors and neurons",
+"Cómo se resuelve · Analogía · Caso concreto · Lo ves · Por qué no las otras · En IA": "How to solve it · Analogy · Worked case · See it · Why not the others · In AI",
+"Cómo se llegó a la IA de hoy, modelo por modelo. Cada capítulo cuenta la idea con dibujos, te deja tocar la fórmula y termina en un desafío. Se abren a medida que dominás temas del Modo clase.": "How we got to today's AI, model by model. Each chapter tells the idea with drawings, lets you touch the formula and ends in a challenge. They open as you master topics in Class mode.",
+"La neurona de McCulloch y Pitts": "The McCulloch and Pitts neuron",
+"La atención: el Transformer": "Attention: the Transformer",
+"hoy": "today",
+"Muchos agentes y el equilibrio de Nash": "Many agents and Nash equilibrium",
+"Compartir": "Share",
+"practicar": "practice",
+"cerrado": "locked",
+"cerrada": "locked",
+"Caja de herramientas": "Toolbox",
+"Lupa de ecuaciones": "Equation magnifier",
+"Calculado con lo registrado en la computadora hasta la última sincronización, más lo hecho aquí desde entonces.": "Calculated from what was logged on the computer up to the last sync, plus what you did here since then.",
+"Líneas del registro de mh": "Lines in mh's log",
+"Límite conocido: las respuestas están dentro de la app. Es un compromiso de estudio, no un control. mh vuelve a corregir todo al importar.": "Known limit: the answers are inside the app. It is a study commitment, not a check. mh grades everything again when importing.",
+"Lección": "Lesson",
+"Comprobar": "Check",
+"Cómo se resuelve": "How to solve it",
+"Caso concreto": "Worked case",
+"Lo ves": "See it",
+"Lección terminada": "Lesson finished",
+"Cuando estabas segura": "When you were sure",
+"Cuando dudabas": "When you weren't sure",
+"La lección terminó antes:": "The lesson ended early:",
+"Los dos": "Both",
+"Mandar": "Send",
+"Contestá aunque sea una pregunta.": "Answer at least one question.",
+"Mandando…": "Sending…",
+"Cada capítulo nace de lo que el anterior no pudo hacer. Para abrir uno, vencé al jefe del anterior y dominá en Modo clase la matemática que usa.": "Each chapter is born from what the previous one couldn't do. To open one, beat the previous boss and master in Class mode the math it uses.",
+"Matemática que pide (Modo clase):": "Math it needs (Class mode):",
+"McCulloch y Pitts": "McCulloch and Pitts"
+},
+"frag": [
+[
+"McCulloch y Pitts",
+"McCulloch and Pitts"
+],
+[
+"Queda agendado para repaso. ",
+"Scheduled for review. "
+],
+[
+"Apostaste seguro y no era: esta es una sorpresa, de las que más enseñan.",
+"You bet you were sure and it wasn't right: a surprise, the kind that teaches the most."
+],
+[
+"Dudabas, y tu duda tenía razón.",
+"You weren't sure, and you were right not to be."
+],
+[
+"Apostaste seguro y acertaste.",
+"You bet you were sure and got it right."
+],
+[
+"Dudabas, pero sabías más de lo que creías.",
+"You weren't sure, but you knew more than you thought."
+],
+[
+"Capítulo ",
+"Chapter "
+],
+[
+": se abre en el recorrido",
+": opens on the path"
+],
+[
+"Jugar · ",
+"Play · "
+],
+[
+"Lleva a: ",
+"Leads to: "
+],
+[
+"Viene de: ",
+"Comes from: "
+],
+[
+"Jefe vencido: volver a jugar",
+"Boss beaten: play again"
+],
+[
+" y otros",
+" et al."
+],
+[
+"Abrir el capítulo ",
+"Open chapter "
+],
+[
+"Practicar ",
+"Practice "
+],
+[
+" (la rayita). Cuantas más tiradas, más cerca.",
+" (the little line). The more flips, the closer it gets."
+],
+[
+" (lo arma /cierre en mathh/movil y lo pasás al teléfono como quieras)",
+" (/cierre builds it in mathh/movil and you move it to your phone however you like)"
+],
+[
+" (te quedan ",
+" (you have "
+],
+[
+" Comprobalo acá abajo.",
+" Check it below."
+],
+[
+" Lo ideal: «segura» cerca del 100 %.",
+" Ideally: «sure» close to 100 %."
+],
+[
+" Los ejercicios donde aparece todavía no están abiertos.",
+" The exercises where it shows up aren't open yet."
+],
+[
+" Misma recta: el producto interno es el máximo posible (o el mínimo, si apuntan al revés).",
+" Same line: the dot product is as large as it can be (or as small, if they point opposite ways)."
+],
+[
+" Ya lo venciste.",
+" You already beat it."
+],
+[
+" a la computadora",
+" to the computer"
+],
+[
+" ahora",
+" now"
+],
+[
+" capítulos",
+" chapters"
+],
+[
+" caras",
+" heads"
+],
+[
+" completo: venciste al jefe",
+" complete: you beat the boss"
+],
+[
+" correctas",
+" correct"
+],
+[
+" de 4 filas; la fórmula es verdadera en ",
+" of 4 rows; the formula is true in "
+],
+[
+" de ellas.",
+" of them."
+],
+[
+" donde suele aparecer.",
+" where it usually shows up."
+],
+[
+" días",
+" days"
+],
+[
+" ejercicio",
+" exercise"
+],
+[
+" ejercicio: ",
+" exercise: "
+],
+[
+" ejercicios",
+" exercises"
+],
+[
+" ejercicios no pasaron su propio control y quedaron fuera.",
+" exercises didn't pass their own check and were left out."
+],
+[
+" ejercicios, ",
+" exercises, "
+],
+[
+" ejercicios: ",
+" exercises: "
+],
+[
+" fallo",
+" mistake"
+],
+[
+" fallos",
+" mistakes"
+],
+[
+" hitos en ",
+" milestones in "
+],
+[
+" intento",
+" attempt"
+],
+[
+" intentos",
+" attempts"
+],
+[
+" intentos del registro.",
+" attempts in the log."
+],
+[
+" intentos del teléfono ya están en mh.",
+" attempts from the phone are already in mh."
+],
+[
+" intentos. En la computadora, dejalo en Descargas y hacé /cierre. Siguen contando aquí hasta que cargues el próximo paquete.",
+" attempts. On the computer, put it in Downloads and run /cierre. They keep counting here until you load the next package."
+],
+[
+" para 2.",
+" for 2."
+],
+[
+" paso",
+" step"
+],
+[
+" pasos",
+" steps"
+],
+[
+" ramas",
+" branches"
+],
+[
+" repaso para hoy",
+" review for today"
+],
+[
+" repasos para hoy",
+" reviews for today"
+],
+[
+" repasos vencidos",
+" overdue reviews"
+],
+[
+" repasos vencidos (el máximo es ",
+" overdue reviews (the maximum is "
+],
+[
+" repasos vencidos. No hay temas nuevos hasta bajarlos.",
+" overdue reviews. No new topics until you bring them down."
+],
+[
+" sin ninguna.",
+" with none."
+],
+[
+" sin pasar a mh",
+" not yet in mh"
+],
+[
+" sin ver.",
+" not seen yet."
+],
+[
+" sueltos, ",
+" standalone, "
+],
+[
+" tiradas: ",
+" flips: "
+],
+[
+" vencidos, ",
+" overdue, "
+],
+[
+" y confirmá.",
+" and confirm."
+],
+[
+" y mirá cómo la frecuencia se acerca a la rayita.",
+" and watch the frequency get closer to the little line."
+],
+[
+" y se da vuelta.",
+" and flips over."
+],
+[
+" · Pide: ",
+" · Requires: "
+],
+[
+" · se hace en el modo historia",
+" · done in Story mode"
+],
+[
+" · se hace en la computadora",
+" · done on the computer"
+],
+[
+" · vencía ",
+" · was due "
+],
+[
+" · ves todo resuelto, no cuenta para tu progreso",
+" · you see everything solved; it doesn't count toward your progress"
+],
+[
+" · ángulo ",
+" · angle "
+],
+[
+" Ángulo recto: u · v = 0, son ortogonales.",
+" Right angle: u · v = 0, they are orthogonal."
+],
+[
+"). No hay ejercicios nuevos hasta bajarlos.",
+"). No new exercises until you bring them down."
+],
+[
+"). Probá de nuevo en un rato.",
+"). Try again in a little while."
+],
+[
+", con capítulo ",
+", with chapter "
+],
+[
+", faltan ",
+", missing "
+],
+[
+", matemática dominada",
+", math mastered"
+],
+[
+", pide ",
+", requires "
+],
+[
+", sin capítulo",
+", no chapter"
+],
+[
+", suelto",
+", standalone"
+],
+[
+", vencido",
+", overdue"
+],
+[
+": da ",
+": gives "
+],
+[
+": el área del cuadrado se multiplica por ",
+": the area of the square is multiplied by "
+],
+[
+": falta acertar algo de ",
+": you still need to get something right in "
+],
+[
+": se abre al ",
+": opens at "
+],
+[
+": se abre cuando domines ",
+": opens when you master "
+],
+[
+": suma ",
+": sum "
+],
+[
+"; cuando dudás, el ",
+"; when you're not sure, "
+],
+[
+"; la probabilidad es ",
+"; the probability is "
+],
+[
+"Abrir el capítulo ",
+"Open chapter "
+],
+[
+"Abrí esta página en ",
+"Open this page in "
+],
+[
+"Antes de comprobar:",
+"Before checking:"
+],
+[
+"Apareció un bicho nuevo: ",
+"A new bug appeared: "
+],
+[
+"Bajar ",
+"Lower "
+],
+[
+"Bloqueo activo: ",
+"Active block: "
+],
+[
+"Bloqueo: ",
+"Block: "
+],
+[
+"Dominado · se apaga en ",
+"Mastered · fades in "
+],
+[
+"Dos maneras de ",
+"Two ways to "
+],
+[
+"El autómata cayó en: ",
+"The robot landed on: "
+],
+[
+"Elegí ",
+"Choose "
+],
+[
+"En total, cuando decís «segura» acertás el ",
+"Overall, when you say «sure» you're right "
+],
+[
+"Era de: ",
+"It was from: "
+],
+[
+"Falta dominar: ",
+"Still to master: "
+],
+[
+"Fase ",
+"Phase "
+],
+[
+"Fila p ",
+"Row p "
+],
+[
+"Hacen falta ",
+"You need "
+],
+[
+"Jefe: ",
+"Boss: "
+],
+[
+"No se pudo armar el archivo: ",
+"Couldn't build the file: "
+],
+[
+"No se pudo guardar el archivo (",
+"Couldn't save the file ("
+],
+[
+"Paquete del ",
+"Package from "
+],
+[
+"Pedir pista ",
+"Ask for hint "
+],
+[
+"Pista ",
+"Hint "
+],
+[
+"Pistas: usaste ",
+"Hints: you used "
+],
+[
+"Practicando ",
+"Practicing "
+],
+[
+"Practicar ",
+"Practice "
+],
+[
+"Predecí primero. ",
+"Predict first. "
+],
+[
+"Predijiste bien. ",
+"You predicted right. "
+],
+[
+"Predijiste «",
+"You predicted «"
+],
+[
+"Se abre el menú Compartir: elegí Drive, correo o lo que uses. En la computadora, guardá el archivo en Descargas y hacé ",
+"The Share menu opens: choose Drive, email or whatever you use. On the computer, save the file in Downloads and run "
+],
+[
+"Se gana dominando «",
+"Earned by mastering «"
+],
+[
+"Seguís en el ",
+"You're still on "
+],
+[
+"Solución · paso ",
+"Solution · step "
+],
+[
+"Sorpresas (segura y no era): ",
+"Surprises (sure and it wasn't): "
+],
+[
+"Subir ",
+"Raise "
+],
+[
+"Tema ",
+"Topic "
+],
+[
+"Tema cortado por hoy: ",
+"Topic paused for today: "
+],
+[
+"Tirá ",
+"Flip "
+],
+[
+"Tocá ",
+"Tap "
+],
+[
+"Una respuesta que cumple: ",
+"An answer that works: "
+],
+[
+"Viene de: ",
+"Comes from: "
+],
+[
+"Volvió ",
+"Came back "
+],
+[
+"abrir el capítulo ",
+"open chapter "
+],
+[
+"bicho ",
+"bug "
+],
+[
+"dominar en Modo clase ",
+"master in Class mode "
+],
+[
+"ecuación ",
+"equation "
+],
+[
+"la herramienta «",
+"the tool «"
+],
+[
+"nivel ",
+"level "
+],
+[
+"repaso · ",
+"review · "
+],
+[
+"tres fallos seguidos en ",
+"three mistakes in a row in "
+],
+[
+"v, así que λ = ",
+"v, so λ = "
+],
+[
+"vencer al jefe del capítulo ",
+"beat the boss of chapter "
+],
+[
+"vencido · mejor ",
+"overdue · best "
+],
+[
+"vuelve el ",
+"returns on "
+],
+[
+"¡Autovector! Av cae en la misma recta que v: Av = ",
+"Eigenvector! Av lands on the same line as v: Av = "
+],
+[
+"¡Ganaste ",
+"You won "
+],
+[
+"¡Venciste a ",
+"You beat "
+],
+[
+"¡Venciste al ",
+"You beat the "
+],
+[
+"Ángulo ",
+"Angle "
+],
+[
+"Árbol genealógico de la IA con ",
+"Family tree of AI with "
+],
+[
+"Lógica, conjuntos e inducción",
+"Logic, sets and induction"
+],
+[
+"Vectores y operaciones",
+"Vectors and operations"
+],
+[
+"Producto interno y ortogonalidad",
+"Dot product and orthogonality"
+],
+[
+"Matrices y multiplicación matricial",
+"Matrices and matrix multiplication"
+],
+[
+"Sistemas de ecuaciones lineales",
+"Systems of linear equations"
+],
+[
+"Espacios vectoriales, bases e independencia lineal",
+"Vector spaces, bases and linear independence"
+],
+[
+"Transformaciones lineales",
+"Linear transformations"
+],
+[
+"Rango, inversa y determinante",
+"Rank, inverse and determinant"
+],
+[
+"Autovalores y autovectores",
+"Eigenvalues and eigenvectors"
+],
+[
+"Proyecciones y descomposiciones (SVD)",
+"Projections and decompositions (SVD)"
+],
+[
+"Probabilidad, condicionamiento y Bayes",
+"Probability, conditioning and Bayes"
+],
+[
+"Derivadas parciales y gradientes",
+"Partial derivatives and gradients"
+],
+[
+"Forma normal, extensiva y equilibrio de Nash",
+"Normal and extensive form, Nash equilibrium"
+],
+[
+"Juegos bayesianos y señalización",
+"Bayesian games and signaling"
+],
+[
+"Juegos repetidos y reputación",
+"Repeated games and reputation"
+],
+[
+"Diseño de mecanismos",
+"Mechanism design"
+],
+[
+"Sistemas dinámicos: puntos fijos y estabilidad",
+"Dynamical systems: fixed points and stability"
+],
+[
+"Teoría de juegos evolutiva y replicador",
+"Evolutionary game theory and the replicator"
+],
+[
+"Cadenas de Markov y metaestabilidad",
+"Markov chains and metastability"
+],
+[
+"Aprendizaje por refuerzo",
+"Reinforcement learning"
+],
+[
+"Aprendizaje por refuerzo multiagente",
+"Multi-agent reinforcement learning"
+],
+[
+"Redes, contagio con umbrales y cascadas",
+"Networks, threshold contagion and cascades"
+],
+[
+"Historia · 1943: la neurona lógica",
+"Story · 1943: the logic neuron"
+],
+[
+"Historia · 1949: Hebb y el aprendizaje",
+"Story · 1949: Hebb and learning"
+],
+[
+"Historia · 1958: el perceptrón",
+"Story · 1958: the perceptron"
+],
+[
+"Historia · 1960: ADALINE y el error medido",
+"Story · 1960: ADALINE and the measured error"
+],
+[
+"Historia · 1986: la retropropagación",
+"Story · 1986: backpropagation"
+],
+[
+"Historia · 1957–1989: Bellman y Q-learning",
+"Story · 1957–1989: Bellman and Q-learning"
+],
+[
+"Historia · 2012: ver con filtros",
+"Story · 2012: seeing with filters"
+],
+[
+"Historia · 2017: la atención",
+"Story · 2017: attention"
+],
+[
+"Historia · Hoy: varios agentes y Nash",
+"Story · Today: many agents and Nash"
+]
+],
+"pat": [
+[
+"(?:Capítulo|Chapter) (\\d+), (\\S+): (.+)\\. Jugar",
+"Chapter $1, $2: $3. Play"
+],
+[
+"(\\d+) temas",
+"$1 topics"
+],
+[
+"(\\d+) capítulos",
+"$1 chapters"
+],
+[
+"(\\d+) ejercicios",
+"$1 exercises"
+]
+]
+};
 
 </script>
 <script>
@@ -751,10 +1978,11 @@ if (typeof module !== "undefined") module.exports = GENEALOGIA;
   }
   function hace(ms) {
     var d = Math.round(ms / 864e5);
+    if (LANG === "en") return Math.abs(d) < 1 ? "today" : d > 0 ? d + (d === 1 ? " day ago" : " days ago") : "in " + (-d) + (d === -1 ? " day" : " days");
     if (Math.abs(d) < 1) return "hoy";
     return d > 0 ? "hace " + d + (d === 1 ? " día" : " días") : "en " + (-d) + (d === -1 ? " día" : " días");
   }
-  function fecha(ms) { return new Date(ms).toLocaleDateString("es-ES", { day: "numeric", month: "short" }); }
+  function fecha(ms) { return new Date(ms).toLocaleDateString(LANG === "en" ? "en-US" : "es-ES", { day: "numeric", month: "short" }); }
 
   /* ---------- datos ---------- */
   function aceptarPaquete(p) {
@@ -1100,7 +2328,64 @@ if (typeof module !== "undefined") module.exports = GENEALOGIA;
     { k: "en_ia", t: "En IA", ic: IC('<rect x="6" y="8" width="12" height="12" rx="4"/><path d="M3 11v6M21 11v6"/><circle cx="10" cy="8" r="1.6"/><circle cx="14" cy="8" r="1.6"/>') },
   ];
   try { S.ficha = sessionStorage.getItem("mh-ficha") || "solucion"; } catch (e) { S.ficha = "solucion"; }
-  function numero(x) { return x.toLocaleString("es-AR", { maximumFractionDigits: 6 }); }
+  /* ---------- idioma: el castellano es el original; el inglés sale de un diccionario (i18n-en.js) aplicado al texto en pantalla.
+     Así lo nuevo que se escriba en castellano se traduce solo en cuanto se agrega su entrada. Los ejercicios traen su propio inglés (etapa 2). ---------- */
+  var EN = window.MATHLAS_EN || { exact: {}, frag: [], pat: [] };
+  var LANG = (function () { try { var g = localStorage.getItem("mh-idioma"); if (g === "es" || g === "en") return g; } catch (e) {} return /^es\b/i.test(navigator.language || "es") ? "es" : "en"; })();
+  var FRAG = (EN.frag || []).filter(function (f) { return f[0].length >= 4; }).sort(function (a, b) { return b[0].length - a[0].length; });
+  var PAT = (EN.pat || []).map(function (p) { return [new RegExp("^" + p[0] + "$"), p[1]]; });
+  /* lo que es contenido de ejercicio (viene de mh con su propio inglés) o fórmula no pasa por el diccionario */
+  var SALTAR = ".katex, .enunciado, .dorso, .solucion, .pista, .respuesta .op, .descarte, .exp, .guia-pasos, .tarjeta, .chip, .fuente, script, style, textarea, iframe, [data-es-fijo]";
+  var FALTAN = window.MATHLAS_FALTAN = {};
+  var ORIG = new WeakMap(), HECHO = new WeakMap();
+  function traducir(s) {
+    var k = s.trim(); if (!k) return s;
+    var ini = s.slice(0, s.indexOf(k[0])), fin = s.slice(s.lastIndexOf(k[k.length - 1]) + 1);
+    if (EN.exact[k] != null) return ini + EN.exact[k] + fin;
+    for (var i = 0; i < PAT.length; i++) if (PAT[i][0].test(k)) return ini + k.replace(PAT[i][0], PAT[i][1]) + fin;
+    var o = s; FRAG.forEach(function (f) { if (o.indexOf(f[0]) >= 0) o = o.split(f[0]).join(f[1]); });
+    if (o === s && /[A-Za-zÁÉÍÓÚáéíóúñ]{3}/.test(k)) FALTAN[k] = (FALTAN[k] || 0) + 1;   /* para revisar qué quedó sin traducir */
+    return o;
+  }
+  var aplicando = false;
+  function aplicarIdioma(raiz) {
+    if (!raiz) return;
+    aplicando = true;
+    var w = document.createTreeWalker(raiz, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT, { acceptNode: function (n) {
+      if (n.nodeType === 1) return n.matches && n.matches(SALTAR) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+      return NodeFilter.FILTER_ACCEPT; } });
+    var n = raiz.nodeType === 3 ? raiz : w.nextNode();
+    while (n) {
+      if (n.nodeType === 3) {
+        if (LANG === "en") { if (HECHO.get(n) !== n.nodeValue) { var es = n.nodeValue, tr = traducir(es); if (tr !== es) { ORIG.set(n, es); n.nodeValue = tr; } HECHO.set(n, n.nodeValue); } }
+        else if (ORIG.has(n) && HECHO.get(n) === n.nodeValue) { n.nodeValue = ORIG.get(n); ORIG.delete(n); HECHO.delete(n); }
+      } else ["aria-label", "placeholder", "title"].forEach(function (a) {
+        var v = n.getAttribute && n.getAttribute(a); if (!v) return;
+        var key = "data-es-" + a;
+        if (LANG === "en") { var o = n.getAttribute(key) || v; var tr2 = traducir(o); if (tr2 !== o) { n.setAttribute(key, o); n.setAttribute(a, tr2); } }
+        else if (n.hasAttribute(key)) { n.setAttribute(a, n.getAttribute(key)); n.removeAttribute(key); }
+      });
+      if (raiz.nodeType === 3) break;
+      n = w.nextNode();
+    }
+    aplicando = false;
+  }
+  var obs = new MutationObserver(function (ms) {
+    if (aplicando || LANG !== "en") return;
+    ms.forEach(function (m) {
+      if (m.type === "characterData") aplicarIdioma(m.target);
+      else m.addedNodes.forEach(function (x) { if (x.nodeType === 1 && x.closest && x.closest(SALTAR)) return; if (x.nodeType === 3 && x.parentElement && x.parentElement.closest(SALTAR)) return; aplicarIdioma(x); });
+    });
+  });
+  function ponerIdioma(l) {
+    LANG = l; try { localStorage.setItem("mh-idioma", l); } catch (e) {}
+    document.documentElement.lang = l;
+    var b = document.getElementById("idioma"); if (b) { b.textContent = l === "en" ? "ES" : "EN"; b.setAttribute("data-es-fijo", ""); b.setAttribute("aria-label", l === "en" ? "Cambiar el idioma a castellano" : "Change language to English"); }
+    aplicarIdioma(document.body); pintar();
+  }
+  function botonIdioma() { var b = el("button", { class: "idioma", type: "button", "data-es-fijo": "", texto: LANG === "en" ? "ES" : "EN", "aria-label": LANG === "en" ? "Cambiar el idioma a castellano" : "Change language to English", on: { click: function () { ponerIdioma(LANG === "en" ? "es" : "en"); } } }); return b; }
+  function L(o, k) { return (LANG === "en" && o[k + "_en"]) || o[k]; }   /* campo traducido, si lo hay */
+  function numero(x) { return x.toLocaleString(LANG === "en" ? "en-US" : "es-AR", { maximumFractionDigits: 6 }); }
   /* Mini-laboratorios: se tocan y se ve el concepto funcionando. */
   var LABS = {
     domino: function (c) {
@@ -1702,28 +2987,28 @@ if (typeof module !== "undefined") module.exports = GENEALOGIA;
   /* Capítulos de PHD2-17. Solo el 1 está construido; los demás se abren venciendo al jefe del anterior. */
   /* an/hito: la línea de tiempo «Tu recorrido» del prototipo del capítulo 1 (las fechas de 2 a 7 se verifican al construir cada capítulo). */
   var CAPITULOS = [
-    { n: 1, an: "1943", hito: "McCulloch y Pitts", nom: "McCulloch y Pitts, 1943", aut: "Reflejos cableados a mano" },
-    { n: 2, an: "1949", hito: "Hebb", nom: "Hebb", aut: "Aprende asociaciones: luz y comida", req: ["al_vectores"] },
-    { n: 3, an: "1958", hito: "Perceptrón", nom: "El perceptrón de Rosenblatt", aut: "Distingue objetos buenos y malos", req: ["al_producto_interno"] },
-    { n: 4, an: "1960", hito: "ADALINE", nom: "ADALINE, de Widrow y Hoff", aut: "Mide su error y lo achica", req: ["al_proyecciones"] },
-    { n: 5, an: "1986", hito: "Retro­propagación", nom: "Retropropagación", aut: "Aprende solo a girar hacia la luz y vence al XOR", req: ["al_matrices"] },
-    { n: 6, an: "1989", hito: "Q-learning", nom: "Bellman y Q-learning", aut: "Aprende un laberinto por premios", req: ["probabilidad"] },
-    { n: 7, an: "2012", hito: "Convoluciones", nom: "Ver con filtros", aut: "Distingue la luz de un reflejo", req: ["al_matrices"] },
-    { n: 8, an: "2017", hito: "Atención", nom: "La atención", aut: "Elige a qué sensor hacerle caso", req: ["probabilidad"] },
-    { n: 9, an: "hoy", hito: "Agentes", nom: "Varios agentes y equilibrio de Nash", aut: "Varios autómatas compiten o cooperan", req: ["juegos_clasicos"] },
+    { n: 1, an: "1943", hito: "McCulloch y Pitts", nom: "McCulloch y Pitts, 1943", aut: "Reflejos cableados a mano", hito_en: "Logic", nom_en: "McCulloch and Pitts, 1943", aut_en: "Reflexes wired by hand" },
+    { n: 2, an: "1949", hito: "Hebb", nom: "Hebb", aut: "Aprende asociaciones: luz y comida", hito_en: "Hebb", nom_en: "Hebb", aut_en: "Learns associations: light and food", req: ["al_vectores"] },
+    { n: 3, an: "1958", hito: "Perceptrón", nom: "El perceptrón de Rosenblatt", aut: "Distingue objetos buenos y malos", hito_en: "Perceptron", nom_en: "Rosenblatt's perceptron", aut_en: "Tells good objects from bad ones", req: ["al_producto_interno"] },
+    { n: 4, an: "1960", hito: "ADALINE", nom: "ADALINE, de Widrow y Hoff", aut: "Mide su error y lo achica", hito_en: "ADALINE", nom_en: "ADALINE, by Widrow and Hoff", aut_en: "Measures its error and shrinks it", req: ["al_proyecciones"] },
+    { n: 5, an: "1986", hito: "Retro­propagación", nom: "Retropropagación", aut: "Aprende solo a girar hacia la luz y vence al XOR", hito_en: "Backprop", nom_en: "Backpropagation", aut_en: "Learns on its own to turn toward the light and beats XOR", req: ["al_matrices"] },
+    { n: 6, an: "1989", hito: "Q-learning", nom: "Bellman y Q-learning", aut: "Aprende un laberinto por premios", hito_en: "Q-learning", nom_en: "Bellman and Q-learning", aut_en: "Learns a maze from rewards", req: ["probabilidad"] },
+    { n: 7, an: "2012", hito: "Convoluciones", nom: "Ver con filtros", aut: "Distingue la luz de un reflejo", hito_en: "Convolutions", nom_en: "Seeing with filters", aut_en: "Tells the light from a reflection", req: ["al_matrices"] },
+    { n: 8, an: "2017", hito: "Atención", nom: "La atención", aut: "Elige a qué sensor hacerle caso", hito_en: "Attention", nom_en: "Attention", aut_en: "Chooses which sensor to listen to", req: ["probabilidad"] },
+    { n: 9, an: "hoy", hito: "Agentes", nom: "Varios agentes y equilibrio de Nash", aut: "Varios autómatas compiten o cooperan", hito_en: "Agents", nom_en: "Many agents and Nash equilibrium", aut_en: "Many robots compete or cooperate", req: ["juegos_clasicos"] },
   ];
   /* Capítulos jugables: cada uno es una página propia que guarda su avance con su clave. */
   var CAPS = {
-    1: { ls: LS_HIST1, b64: "CAP1_B64", archivo: "historia-1943.html", titulo: "Capítulo 1: McCulloch y Pitts, 1943", vencido: function (h) { return !!h.jefe2; } },
-    2: { ls: "historia-cap2", b64: "CAP2_B64", archivo: "historia-1949.html", titulo: "Capítulo 2: Hebb, 1949", vencido: function (h) { return !!h.jefe; } },
-    3: { ls: "historia-cap3", b64: "CAP3_B64", archivo: "historia-1958.html", titulo: "Capítulo 3: El perceptrón, 1958", vencido: function (h) { return !!h.jefe; } },
-    4: { ls: "historia-cap4", b64: "CAP4_B64", archivo: "historia-1960.html", titulo: "Capítulo 4: ADALINE, 1960", vencido: function (h) { return !!h.jefe; } },
-    5: { ls: "historia-cap5", b64: "CAP5_B64", archivo: "historia-1986.html", titulo: "Capítulo 5: Retropropagación, 1986", vencido: function (h) { return !!h.jefe; } },
-    6: { ls: "historia-cap6", b64: "CAP6_B64", archivo: "historia-1989.html", titulo: "Capítulo 6: Bellman y Q-learning", vencido: function (h) { return !!h.jefe; } },
-    7: { ls: "historia-cap2012", b64: "CAP7_B64", archivo: "historia-2012.html", titulo: "Capítulo 7: Ver con filtros, 2012", vencido: function (h) { return !!h.jefe; } },
-    8: { ls: "historia-cap2017", b64: "CAP8_B64", archivo: "historia-2017.html", titulo: "Capítulo 8: La atención, 2017", vencido: function (h) { return !!h.jefe; } },
+    1: { ls: LS_HIST1, b64: "CAP1_B64", archivo: "historia-1943.html", titulo: "Capítulo 1: McCulloch y Pitts, 1943", titulo_en: "Chapter 1: McCulloch and Pitts, 1943", vencido: function (h) { return !!h.jefe2; } },
+    2: { ls: "historia-cap2", b64: "CAP2_B64", archivo: "historia-1949.html", titulo: "Capítulo 2: Hebb, 1949", titulo_en: "Chapter 2: Hebb, 1949", vencido: function (h) { return !!h.jefe; } },
+    3: { ls: "historia-cap3", b64: "CAP3_B64", archivo: "historia-1958.html", titulo: "Capítulo 3: El perceptrón, 1958", titulo_en: "Chapter 3: The perceptron, 1958", vencido: function (h) { return !!h.jefe; } },
+    4: { ls: "historia-cap4", b64: "CAP4_B64", archivo: "historia-1960.html", titulo: "Capítulo 4: ADALINE, 1960", titulo_en: "Chapter 4: ADALINE, 1960", vencido: function (h) { return !!h.jefe; } },
+    5: { ls: "historia-cap5", b64: "CAP5_B64", archivo: "historia-1986.html", titulo: "Capítulo 5: Retropropagación, 1986", titulo_en: "Chapter 5: Backpropagation, 1986", vencido: function (h) { return !!h.jefe; } },
+    6: { ls: "historia-cap6", b64: "CAP6_B64", archivo: "historia-1989.html", titulo: "Capítulo 6: Bellman y Q-learning", titulo_en: "Chapter 6: Bellman and Q-learning", vencido: function (h) { return !!h.jefe; } },
+    7: { ls: "historia-cap2012", b64: "CAP7_B64", archivo: "historia-2012.html", titulo: "Capítulo 7: Ver con filtros, 2012", titulo_en: "Chapter 7: Seeing with filters, 2012", vencido: function (h) { return !!h.jefe; } },
+    8: { ls: "historia-cap2017", b64: "CAP8_B64", archivo: "historia-2017.html", titulo: "Capítulo 8: La atención, 2017", titulo_en: "Chapter 8: Attention, 2017", vencido: function (h) { return !!h.jefe; } },
     /* «hoy» guarda su avance con la clave de cuando era el capítulo 7, para no perderlo */
-    9: { ls: "historia-cap7", b64: "CAP9_B64", archivo: "historia-hoy.html", titulo: "Capítulo 9: Varios agentes y Nash", vencido: function (h) { return !!h.jefe; } },
+    9: { ls: "historia-cap7", b64: "CAP9_B64", archivo: "historia-hoy.html", titulo: "Capítulo 9: Varios agentes y Nash", titulo_en: "Chapter 9: Many agents and Nash", vencido: function (h) { return !!h.jefe; } },
   };
   function jefeVencido(n) { var c = CAPS[n], h = c && leer(c.ls); return !!(h && c.vencido(h)); }
   function jefeVencido1() { return jefeVencido(1); }
@@ -1732,7 +3017,7 @@ if (typeof module !== "undefined") module.exports = GENEALOGIA;
   function vistaInicio(v) {
     var h = leer(LS_HIST1), venc = MHR.repasos(eventos(), Date.now()).filter(function (p) { return p.vencido && itemsPorId()[p.item]; }).length;
     var ult = 1; Object.keys(CAPS).forEach(function (n) { if (leer(CAPS[n].ls)) ult = Math.max(ult, Number(n)); });
-    var detHist = !h ? "Empezá por el capítulo 1: McCulloch y Pitts, 1943" : jefeVencido(ult) ? "Capítulo " + ult + " completo: venciste al jefe" : "Seguís en el " + CAPS[ult].titulo.replace("Capítulo", "capítulo");
+    var detHist = !h ? "Empezá por el capítulo 1: McCulloch y Pitts, 1943" : jefeVencido(ult) ? "Capítulo " + ult + " completo: venciste al jefe" : "Seguís en el " + L(CAPS[ult], "titulo").replace("Capítulo", "capítulo");
     var detClase = (venc ? venc + (venc === 1 ? " repaso para hoy" : " repasos para hoy") : "Sin repasos vencidos") + " · " + S.paq.items.length + " ejercicios";
     v.appendChild(el("p", { class: "bienvenida", texto: "¿Cómo seguimos hoy?" }));
     v.appendChild(el("button", { class: "modo historia", type: "button", id: "ir-historia", on: { click: function () { S.modo = "historia"; pintar(); } } }, [
@@ -1850,7 +3135,7 @@ if (typeof module !== "undefined") module.exports = GENEALOGIA;
   function vistaPortada(v) {
     var p = el("div", { class: "portada" }), entrar = function () { entrarDesdePortada(); };
     var ir = function (id) { return function () { var x = document.getElementById(id); if (x) x.scrollIntoView({ behavior: "smooth", block: "start" }); }; };
-    p.appendChild(el("div", { class: "barra" }, [el("span", { class: "nombre" }, [marca(), "Mathlas"]), el("button", { class: "enlace", type: "button", texto: "Entrar", on: { click: entrar } })]));
+    p.appendChild(el("div", { class: "barra" }, [el("span", { class: "nombre" }, [marca(), "Mathlas"]), el("span", { style: "display:flex;gap:10px;align-items:center" }, [botonIdioma(), el("button", { class: "enlace", type: "button", texto: "Entrar", on: { click: entrar } })])]));
     p.appendChild(el("p", { class: "volanta", texto: "Matemática para IA · de a ratos" }));
     var h = el("h2", { class: "grande" }); h.append("La matemática de la IA, ", el("em", { texto: "explicada jugando" }), "."); p.appendChild(h);
     p.appendChild(el("p", { class: "bajada", texto: "Mathlas es una app para practicar, desde el teléfono, la matemática que hay detrás de la inteligencia artificial: vectores, probabilidad, juegos, neuronas." }));
@@ -1864,7 +3149,7 @@ if (typeof module !== "undefined") module.exports = GENEALOGIA;
     p.appendChild(el("h2", { class: "seccion", texto: "Dos maneras de practicar" }));
     p.appendChild(tarjetaModo(true, { texto: "Ejercicios cortos de vectores, matrices, probabilidad, juegos de pagos y redes. Antes de responder apostás si estás segura o dudás, y el mapa de temas se marchita si no repasás.",
       extra: [el("div", { class: "chips" }, ["Segura o dudo", "Construir vectores y neuronas", "Bestiario de errores", "Un autómata que se equivoca", "Jefes que mezclan temas", "Herramientas que se ganan", "3 pistas"].map(function (c) { return el("span", { texto: c }); })),
-        el("div", { class: "fichas" }, [el("small", { texto: "Cada ejercicio trae fichas" }), el("span", { texto: "Cómo se resuelve · Analogía · Caso concreto · Lo ves · Por qué no las otras · En IA" })])] }));
+        el("div", { class: "fichas-portada" }, [el("small", { texto: "Cada ejercicio trae fichas" }), el("span", { texto: "Cómo se resuelve · Analogía · Caso concreto · Lo ves · Por qué no las otras · En IA" })])] }));
     var tl = el("dl", { class: "linea-t" });
     [["1943", "La neurona de McCulloch y Pitts"], ["1949", "Hebb: las que se activan juntas, se conectan"], ["1958", "El perceptrón"], ["1960", "ADALINE"], ["1986", "Retropropagación"], ["1957-89", "Bellman y Q-learning"], ["2012", "Ver con filtros: las redes convolucionales"], ["2017", "La atención: el Transformer"], ["hoy", "Muchos agentes y el equilibrio de Nash"]]
       .forEach(function (x) { tl.appendChild(el("dt", { texto: x[0] })); tl.appendChild(el("dd", { texto: x[1] })); });
@@ -1902,7 +3187,7 @@ if (typeof module !== "undefined") module.exports = GENEALOGIA;
     var fila = function (h) { return 44 + anios.indexOf(h.an) * 50; }, alto = 44 + anios.length * 50;
     var NS = "http://www.w3.org/2000/svg", mk = function (tag, at) { var n = document.createElementNS(NS, tag); Object.keys(at).forEach(function (k) { if (k === "texto") n.textContent = at[k]; else n.setAttribute(k, at[k]); }); return n; };
     var g = mk("svg", { viewBox: "0 0 360 " + alto, class: "arbol", role: "group", "aria-label": "Árbol genealógico de la IA con " + GEN.hitos.length + " hitos en " + GEN.ramas.length + " ramas" });
-    GEN.ramas.forEach(function (r) { g.appendChild(mk("text", { x: cols[r[0]], y: 16, "text-anchor": "middle", class: "rama", texto: r[1] })); });
+    GEN.ramas.forEach(function (r) { g.appendChild(mk("text", { x: cols[r[0]], y: 16, "text-anchor": "middle", class: "rama", texto: LANG === "en" && r[2] ? r[2] : r[1] })); });
     var conTema = function (h) { return A.tema && h.temas.indexOf(A.tema) >= 0; };
     GEN.flechas.forEach(function (f) {
       var a = H[f[0]], b = H[f[1]], x1 = cols[a.rama], y1 = fila(a) + 14, x2 = cols[b.rama], y2 = fila(b) - 14, my = (y1 + y2) / 2;
@@ -1918,7 +3203,7 @@ if (typeof module !== "undefined") module.exports = GENEALOGIA;
       grupo.style.cursor = "pointer";
       grupo.appendChild(mk("circle", { cx: x, cy: y, r: "13", class: "nodo" + (h.cap ? " cap" : "") + (dom ? " dom" : "") + (h.id === A.sel && !A.tema ? " sel" : "") + (A.tema && !conTema(h) ? " apagado" : "") }));
       grupo.appendChild(mk("text", { x: x, y: y + 3.5, "text-anchor": "middle", class: "anio", texto: h.an === "hoy" ? "hoy" : "’" + h.an.slice(2) }));
-      grupo.appendChild(mk("text", { x: x, y: y + 25, "text-anchor": "middle", class: "nom", texto: h.nom }));
+      grupo.appendChild(mk("text", { x: x, y: y + 25, "text-anchor": "middle", class: "nom", texto: L(h, "nom") }));
       var elegir = function () { A.sel = h.id; A.tema = null; pintar(); };
       grupo.addEventListener("click", elegir); grupo.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); elegir(); } });
       g.appendChild(grupo);
@@ -1926,12 +3211,12 @@ if (typeof module !== "undefined") module.exports = GENEALOGIA;
     v.appendChild(el("div", { class: "lamina-app", style: "overflow-x:auto" }, [g]));
     v.appendChild(el("div", { class: "leyenda" }, [el("span", { texto: "● lleno: tiene capítulo" }), el("span", { texto: "○ punteado: sin capítulo todavía" }), el("span", { texto: "── lo dice el artículo" }), el("span", { texto: "- - - idea nuestra" }), el("span", { texto: "borde verde: ya dominás su matemática" })]));
     var h = H[A.sel], ficha = el("section", { class: "ficha arbol-ficha", "aria-live": "polite" });
-    ficha.appendChild(el("h3", { texto: h.an + " · " + h.nom }));
+    ficha.appendChild(el("h3", { texto: h.an + " · " + L(h, "nom") }));
     if (h.quien) ficha.appendChild(el("span", { class: "quien", texto: h.quien }));
-    ficha.appendChild(el("p", { texto: h.txt }));
+    ficha.appendChild(el("p", { texto: L(h, "txt") }));
     var de = GEN.flechas.filter(function (f) { return f[1] === h.id; }), a = GEN.flechas.filter(function (f) { return f[0] === h.id; });
-    if (de.length) ficha.appendChild(el("p", { class: "nota" }, ["Viene de: " + de.map(function (f) { return H[f[0]].nom + (f[3] ? " (" + f[3].replace(/\.$/, "") + ")" : ""); }).join("; ") + "."]));
-    if (a.length) ficha.appendChild(el("p", { class: "nota" }, ["Lleva a: " + a.map(function (f) { return H[f[1]].nom; }).join(", ") + "."]));
+    if (de.length) ficha.appendChild(el("p", { class: "nota" }, ["Viene de: " + de.map(function (f) { var por = LANG === "en" && f[4] ? f[4] : f[3]; return L(H[f[0]], "nom") + (por ? " (" + por.replace(/\.$/, "") + ")" : ""); }).join("; ") + "."]));
+    if (a.length) ficha.appendChild(el("p", { class: "nota" }, ["Lleva a: " + a.map(function (f) { return L(H[f[1]], "nom"); }).join(", ") + "."]));
     if (h.temas.length) {
       ficha.appendChild(el("p", { class: "nota", texto: "Matemática que pide (Modo clase):" }));
       var ch = el("div", { class: "temas-chips" });
@@ -1967,22 +3252,22 @@ if (typeof module !== "undefined") module.exports = GENEALOGIA;
       }
     }
     v.appendChild(intro("Tu recorrido", "Cada capítulo nace de lo que el anterior no pudo hacer. Para abrir uno, vencé al jefe del anterior y dominá en Modo clase la matemática que usa."));
-    var lam = lamina(actual, "Capítulo " + actual + " · " + CAPITULOS[actual - 1].an + " · " + CAPITULOS[actual - 1].nom.replace(/, \d{4}$/, "")); if (lam) v.appendChild(lam);
+    var lam = lamina(actual, "Capítulo " + actual + " · " + CAPITULOS[actual - 1].an + " · " + L(CAPITULOS[actual - 1], "nom").replace(/, \d{4}$/, "")); if (lam) v.appendChild(lam);
     dibujarMapa(v, CAPITULOS.map(function (c) {
       var libre = !!abierto[c.n], jugable = libre && !!CAPS[c.n], hecho = vencidos[c.n];
       var pide = (c.req || []).map(function (t) { return (dom[t] ? "✓ " : "falta ") + nombreTema(t); }).join(" · ");
       var estado = jugable ? (hecho ? "Jefe vencido: volver a jugar" : "Jugar") : libre ? "Abierto, en construcción" : "Cerrado";
       return { txt: String(c.n), cerrado: !libre, clases: (libre ? "abierto" : "") + (c.n === actual ? " actual" : "") + (jugable && hecho ? " hecho" : ""),
-        aria: "Capítulo " + c.n + ", " + c.an + ": " + c.nom + ". " + estado + (pide ? ". Pide: " + pide : ""), an: c.an, nom: c.nom.replace(/, \d{4}$/, ""),
-        au: (jugable ? estado + " · " : "") + c.aut + (pide ? " · Pide: " + pide : ""),
+        aria: "Capítulo " + c.n + ", " + c.an + ": " + L(c, "nom") + ". " + estado + (pide ? ". Pide: " + pide : ""), an: c.an, nom: L(c, "nom").replace(/, \d{4}$/, ""),
+        au: (jugable ? estado + " · " : "") + L(c, "aut") + (pide ? " · Pide: " + pide : ""),
         tocar: function () {
           if (jugable) { S.modo = "cap"; S.capN = c.n; pintar(); return; }
-          if (libre) return avisar("Capítulo " + c.n + ", " + c.nom + ": ya lo abriste; lo estoy construyendo.");
+          if (libre) return avisar("Capítulo " + c.n + ", " + L(c, "nom") + ": ya lo abriste; lo estoy construyendo.");
           var por = [];
           if (!abierto[c.n - 1]) por.push("abrir el capítulo " + (c.n - 1));
           if (abierto[c.n - 1] && !vencidos[c.n - 1]) por.push("vencer al jefe del capítulo " + (c.n - 1));
           if (faltan[c.n] && faltan[c.n].length) por.push("dominar en Modo clase " + faltan[c.n].map(nombreTema).join(" y "));
-          avisar("Capítulo " + c.n + ", " + c.nom + ": se abre al " + por.join(", ") + ".");
+          avisar("Capítulo " + c.n + ", " + L(c, "nom") + ": se abre al " + por.join(", ") + ".");
         } };
     }), { hechos: CAPITULOS.filter(function (c) { return vencidos[c.n]; }).map(function (c) { return c.n - 1; }), actual: actual - 1,
       carteles: [[0, "XOR"], [1, "pesos sin freno"], [2, "XOR, otra vez"], [3, "η demasiado grande"], [4, "XOR aprendido"], [5, "el premio chico"], [6, "la imagen casi idéntica"], [7, "¿quién muerde a quién?"], [8, "coordinarse"]].map(function (j) {
@@ -2065,7 +3350,7 @@ if (typeof module !== "undefined") module.exports = GENEALOGIA;
       var r = O.r, algo = Object.keys(r).some(function (k) { return String(r[k]).trim(); });
       if (!algo) { aviso.textContent = "Contestá aunque sea una pregunta."; return; }
       var datos = { v: 1, tipo: O.item ? "ejercicio" : "general", item: O.item, fecha: new Date().toISOString(), desde: O.de, ancho: window.innerWidth,
-        intentos: S.movil.length, capitulos: Object.keys(CAPS).filter(function (n) { return leer(CAPS[n].ls); }).length, r: r };
+        idioma: LANG, intentos: S.movil.length, capitulos: Object.keys(CAPS).filter(function (n) { return leer(CAPS[n].ls); }).length, r: r };
       var guardarPend = function () { var p = leer(LS_OPI_PEND) || []; p.push(datos); try { localStorage.setItem(LS_OPI_PEND, JSON.stringify(p)); } catch (x) {} O.listo = "pendiente"; pintar(); };
       if (!navigator.onLine) return guardarPend();
       aviso.textContent = "Mandando…";
@@ -2077,7 +3362,7 @@ if (typeof module !== "undefined") module.exports = GENEALOGIA;
   /* En Modo ayuda el capítulo sabe que es una visita: abre todo, muestra los desafíos resueltos y no guarda su avance. */
   var AYUDA_CAP = "<script>" + (window.MATHLAS_AYUDA_JS || "window.MATHLAS_AYUDA = true;") + "<\/script>";  /* cap-ayuda.js, metido por build-artifact.js */
   function vistaCapitulo(v) {
-    var c = CAPS[S.capN || 1], f = el("iframe", { class: "marco", title: c.titulo });
+    var c = CAPS[S.capN || 1], f = el("iframe", { class: "marco", title: L(c, "titulo") });
     if (window[c.b64]) {
       if (!capHtml[S.capN]) capHtml[S.capN] = new TextDecoder().decode(Uint8Array.from(atob(window[c.b64]), function (ch) { return ch.charCodeAt(0); }));
       /* va justo después del doctype: antes, la página entra en modo quirks y KaTeX se rompe */
@@ -2133,7 +3418,11 @@ if (typeof module !== "undefined") module.exports = GENEALOGIA;
     if (/^tema-[a-z_0-9]+$/.test(hs) && (S.paq.temas || []).some(function (t) { return t.id === hs.slice(5); })) { S.modo = "clase"; S.vista = "practicar"; S.temaFiltro = hs.slice(5); }
     else if (/^hito-[a-z0-9]+$/.test(hs) && GEN && GEN.hitos.some(function (h) { return h.id === hs.slice(5); })) { S.modo = "historia"; S.histVista = "arbol"; S.arbol = { sel: hs.slice(5), tema: null }; }
   })();
+  (function () { var b = document.getElementById("idioma"); b.addEventListener("click", function () { ponerIdioma(LANG === "en" ? "es" : "en"); }); })();
+  document.documentElement.lang = LANG;
   pintar();
+  obs.observe(document.body, { childList: true, subtree: true, characterData: true });
+  if (LANG === "en") ponerIdioma("en");
   reintentarOpiniones(); window.addEventListener("online", reintentarOpiniones);
 
   /* En claude.ai: trae la copia de la cuenta, la junta con lo local (sin duplicar intentos) y la vuelve a guardar. */
