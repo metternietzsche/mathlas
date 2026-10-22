@@ -364,6 +364,13 @@ header .titulo h1 { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflo
 .vista-hist button[aria-pressed="true"] { background: var(--azul-suave); color: var(--azul); }
 .vista-hist button:focus-visible, .arbol-hito:focus-visible { outline: 3px solid var(--azul); outline-offset: 2px; }
 .arbol { width: 100%; height: auto; display: block; }
+.escalera-svg { width: 100%; height: auto; display: block; overflow: hidden; }
+.escalera-svg g { transform-box: view-box; }
+.esc-puntos { display: flex; gap: 6px; justify-content: center; }
+.esc-puntos span { width: 26px; height: 6px; border-radius: 3px; background: var(--linea); }
+.esc-puntos span.on { background: var(--naranja); }
+.esc-puntos span.salto { outline: 2px dashed var(--ambar); outline-offset: 2px; }
+.esc-formula { font-family: var(--f-dato); font-size: 0.95rem; color: var(--azul); }
 .lamina-app { background: var(--hoja); border: 1px solid var(--linea); border-radius: 16px; padding: 8px; }
 .arbol .rama { font: 600 10px var(--f-ui); fill: var(--gris); text-transform: uppercase; letter-spacing: 0.06em; }
 .arbol .anio { font: 500 9.5px var(--f-dato); fill: var(--gris); }
@@ -2444,7 +2451,8 @@ window.MATHLAS_EN = {
 "Lo que ve la cámara": "What the camera sees",
 "Mapa de su filtro": "Its filter's map",
 "Laboratorio": "Lab",
-"Modelo": "Model"
+"Modelo": "Model",
+"Escalera": "Ladder"
 },
 "frag": [
 [
@@ -6171,6 +6179,139 @@ window.MATHLAS_EN = {
     v.appendChild(ficha);
     function pintar() { var m = document.getElementById("main"), y = m.scrollTop; window.MATHLAS_PINTAR(); m.scrollTop = y; }
   }
+  /* ---------- Escalera (PHD2-20): lo chico queda adentro de lo grande. La secuencia es propia, sacada del árbol de Mathlas
+     (producto interno → filtro → atención → bloque con atajo → agente), no de ninguna pieza externa. Esquema simplificado,
+     números ilustrativos. Cada escalón: una palabra, un dibujo y una fórmula; en la atención hay un salto de tipo. ---------- */
+  var NSV = "http://www.w3.org/2000/svg";
+  function sv2(tag, at, hijos) { var n = document.createElementNS(NSV, tag); Object.keys(at || {}).forEach(function (k) { if (k === "texto") n.textContent = at[k]; else n.setAttribute(k, at[k]); }); (hijos || []).forEach(function (h) { if (h) n.appendChild(h); }); return n; }
+  function tx(es, en) { return LANG === "en" ? en : es; }
+  function flecha(g, x1, y1, x2, y2, color, ancho) {
+    var a = Math.atan2(y2 - y1, x2 - x1), p = function (d, r) { return (x2 - Math.cos(a + d) * r).toFixed(1) + "," + (y2 - Math.sin(a + d) * r).toFixed(1); };
+    g.appendChild(sv2("path", { d: "M" + x1 + "," + y1 + " L" + x2 + "," + y2, stroke: color, "stroke-width": ancho || 3, "stroke-linecap": "round", fill: "none" }));
+    g.appendChild(sv2("path", { d: "M" + x2 + "," + y2 + " L" + p(0.45, 11) + " L" + p(-0.45, 11) + " Z", fill: color }));
+  }
+  function texto(g, x, y, s, op) { op = op || {}; g.appendChild(sv2("text", { x: x, y: y, "text-anchor": op.ancla || "middle", style: "font:" + (op.peso || 500) + " " + (op.tam || 13) + "px " + (op.fam || "var(--f-ui)") + ";fill:" + (op.color || "var(--tinta)"), texto: s })); }
+  var ESCALONES = [
+    { pal: "Vectores", pal_en: "Vectors", f: "u = (2, 1)     v = (1, 3)", txt: "Dos flechas. Cada una es una lista de números.", txt_en: "Two arrows. Each one is a list of numbers.", temas: ["al_vectores"], hito: "word2vec",
+      dib: function (g) {
+        g.appendChild(sv2("path", { d: "M40,200 L330,200 M60,220 L60,20", stroke: "var(--linea)", "stroke-width": 2 }));
+        flecha(g, 60, 200, 180, 140, "var(--azul)", 5); flecha(g, 60, 200, 120, 20, "var(--naranja)", 5);
+        texto(g, 196, 138, "u", { fam: "var(--f-texto)", tam: 26, color: "var(--azul)", ancla: "start" }); texto(g, 132, 30, "v", { fam: "var(--f-texto)", tam: 26, color: "var(--naranja)", ancla: "start" });
+      } },
+    { pal: "Producto interno", pal_en: "Dot product", f: "u · v = 2·1 + 1·3 = 5", txt: "Las dos flechas se vuelven un solo número: cuánto se parecen.", txt_en: "The two arrows become a single number: how alike they are.", temas: ["al_producto_interno"], hito: "word2vec",
+      adentro: { x: 26, y: 62, s: 0.42 },
+      dib: function (g) {
+        g.appendChild(sv2("rect", { x: 16, y: 48, width: 172, height: 128, rx: 16, fill: "var(--hoja)", stroke: "var(--azul)", "stroke-width": 2.5 }));
+        texto(g, 102, 36, "u · v", { fam: "var(--f-texto)", tam: 20, color: "var(--azul)" });
+        flecha(g, 196, 112, 246, 112, "var(--gris)", 3);
+        texto(g, 300, 132, "5", { fam: "var(--f-titulo)", tam: 64, color: "var(--naranja)" });
+      } },
+    { pal: "Filtro", pal_en: "Filter", f: "(I ⋆ K)(i, j) = Σ I · K", txt: "El mismo producto interno, en cada lugar de la imagen: así ve una red de 2012.", txt_en: "The same dot product, at every spot in the image: that's how a 2012 network sees.", temas: ["al_matrices"], hito: "alexnet",
+      adentro: { x: 93, y: 93, s: 0.26 },
+      dib: function (g) {
+        var NUM = [[2, 0, 7, 1, 3], [4, 5, 0, 6, 2], [1, 3, 8, 0, 5]];
+        for (var i = 0; i < 3; i++) for (var j = 0; j < 5; j++) {
+          var x = 6 + j * 70, y = 20 + i * 70;
+          g.appendChild(sv2("rect", { x: x, y: y, width: 64, height: 64, rx: 8, fill: "var(--naranja)", opacity: (0.08 + NUM[i][j] / 10).toFixed(2) }));
+          if (!(i === 1 && (j === 1 || j === 2))) texto(g, x + 32, y + 40, String(NUM[i][j]), { fam: "var(--f-dato)", tam: 18 });
+        }
+        g.appendChild(sv2("rect", { x: 76, y: 90, width: 134, height: 64, rx: 10, fill: "var(--hoja)", stroke: "var(--naranja)", "stroke-width": 3 }));   /* dos casillas: ahí va el producto interno */
+      } },
+    { pal: "Atención", pal_en: "Attention", salto: true, f: "α = softmax(q · k / √d)", txt: "Salto de tipo: ya no es un filtro fijo que se corre. Cada palabra elige a cuáles mirar, y los pesos suman 1.", txt_en: "A jump in kind: it is no longer a fixed filter that slides. Each word chooses which ones to look at, and the weights add up to 1.", temas: ["probabilidad", "al_producto_interno"], hito: "atencion",
+      dib: function (g) {
+        var P = LANG === "en" ? ["the", "cat", "chases", "the", "mouse"] : ["el", "gato", "persigue", "al", "ratón"], A = [0.06, 0.32, 0.12, 0.06, 0.44];
+        P.forEach(function (w, i) {
+          var x = 10 + i * 70;
+          g.appendChild(sv2("rect", { x: x, y: 150, width: 62, height: 34, rx: 8, fill: i === 2 ? "var(--azul-suave)" : "var(--hoja)", stroke: i === 2 ? "var(--azul)" : "var(--linea)", "stroke-width": 2 }));
+          texto(g, x + 31, 172, w, { tam: 12 });
+          if (i !== 2) g.appendChild(sv2("path", { d: "M171,150 Q" + ((171 + x + 31) / 2) + "," + (60 - A[i] * 60) + " " + (x + 31) + ",150", fill: "none", stroke: "var(--naranja)", "stroke-width": (1 + A[i] * 14).toFixed(1), opacity: (0.35 + A[i]).toFixed(2) }));
+          g.appendChild(sv2("rect", { x: x + 6, y: 228 - A[i] * 70, width: 50, height: A[i] * 70, rx: 4, fill: "var(--azul)", opacity: 0.8 }));
+        });
+        g.appendChild(sv2("rect", { x: 240, y: 6, width: 112, height: 24, rx: 12, fill: "var(--ambar-suave)" }));
+        texto(g, 296, 23, tx("salto de tipo", "a jump in kind"), { tam: 11, peso: 600, color: "var(--ambar)" });
+      } },
+    { pal: "Bloque", pal_en: "Block", f: "salida = F(x) + x", f_en: "output = F(x) + x", txt: "La atención va adentro de un bloque. El atajo «+ x» viene de ResNet: por ahí las convoluciones son antepasadas del Transformer.", txt_en: "Attention goes inside a block. The shortcut «+ x» comes from ResNet: that is how convolutions are ancestors of the Transformer.", temas: ["calculo_gradientes"], hito: "resnet",
+      adentro: { x: 86, y: 52, s: 0.5 },
+      dib: function (g) {
+        g.appendChild(sv2("rect", { x: 74, y: 40, width: 204, height: 144, rx: 14, fill: "var(--hoja)", stroke: "var(--tinta)", "stroke-width": 2 }));
+        g.appendChild(sv2("path", { d: "M176,226 L176,206 M40,214 L40,20 L176,20 L176,30", fill: "none", stroke: "var(--verde)", "stroke-width": 3, "stroke-dasharray": "6 5" }));
+        g.appendChild(sv2("path", { d: "M176,230 L40,230 L40,214", fill: "none", stroke: "var(--verde)", "stroke-width": 3, "stroke-dasharray": "6 5" }));
+        g.appendChild(sv2("circle", { cx: 176, cy: 20, r: 12, fill: "var(--verde-suave)", stroke: "var(--verde)", "stroke-width": 2 }));
+        texto(g, 176, 25, "+", { tam: 16, peso: 700, color: "var(--verde)" });
+        texto(g, 30, 120, "x", { fam: "var(--f-texto)", tam: 20, color: "var(--verde)" });
+        texto(g, 300, 214, tx("atajo (ResNet)", "shortcut (ResNet)"), { tam: 11, color: "var(--verde)" });
+      } },
+    { pal: "Agente", pal_en: "Agent", f: tx("cada uno juega lo mejor contra los demás", "each one plays its best against the others"), txt: "Ese bloque, repetido, es la cabeza de un agente que actúa en un mundo con otros agentes.", txt_en: "That block, repeated, is the head of an agent acting in a world with other agents.", temas: ["marl", "juegos_clasicos"], hito: "hoy",
+      adentro: { x: 34, y: 30, s: 0.36 },
+      dib: function (g) {
+        g.appendChild(sv2("rect", { x: 24, y: 22, width: 148, height: 104, rx: 18, fill: "var(--hoja)", stroke: "var(--azul)", "stroke-width": 3 }));
+        g.appendChild(sv2("rect", { x: 40, y: 126, width: 116, height: 60, rx: 12, fill: "var(--azul-suave)", stroke: "var(--azul)", "stroke-width": 2 }));
+        [56, 140].forEach(function (cx) { g.appendChild(sv2("circle", { cx: cx, cy: 196, r: 14, fill: "var(--tinta)" })); });
+        g.appendChild(sv2("rect", { x: 236, y: 100, width: 90, height: 66, rx: 14, fill: "var(--ambar-suave)", stroke: "var(--naranja)", "stroke-width": 2 }));
+        [256, 306].forEach(function (cx) { g.appendChild(sv2("circle", { cx: cx, cy: 176, r: 11, fill: "var(--tinta)" })); });
+        g.appendChild(sv2("path", { d: "M170,150 C200,120 210,120 232,128", fill: "none", stroke: "var(--gris)", "stroke-width": 2, "stroke-dasharray": "5 5" }));
+        texto(g, 281, 90, tx("otro agente", "another agent"), { tam: 11, color: "var(--ambar)" });
+      } },
+  ];
+  /* dibuja un escalón con todo lo que tiene adentro (cada uno lleva al anterior, hasta un salto de tipo) */
+  function escena(k) {
+    var e = ESCALONES[k], g = sv2("g", {});
+    e.dib(g);
+    if (e.adentro && k > 0) {
+      var a = e.adentro, sub = escena(k - 1);
+      sub.setAttribute("transform", "translate(" + a.x + "," + a.y + ") scale(" + a.s + ")"); sub.setAttribute("data-adentro", "1");
+      g.appendChild(sub);
+    }
+    return g;
+  }
+  function vistaEscalera(v) {
+    var k = Math.min(S.escalon || 0, ESCALONES.length - 1), e = ESCALONES[k];
+    v.appendChild(intro(tx("La escalera", "The ladder"), tx("Lo chico queda adentro de lo grande. Andá hacia afuera para ver qué se construye con la matemática; hacia adentro, para ver de qué está hecha la IA.", "Small things stay inside bigger ones. Go outward to see what math builds; go inward to see what AI is made of.")));
+    var svg = sv2("svg", { viewBox: "0 0 360 240", class: "escalera-svg", role: "img", "aria-label": L(e, "pal") });
+    var actual = escena(k); svg.appendChild(actual);
+    v.appendChild(el("div", { class: "lamina-app" }, [svg, el("p", { class: "nota", style: "margin:4px 4px 0", texto: tx("Esquema simplificado · números ilustrativos", "Simplified sketch · illustrative numbers") })]));
+    var puntos = el("div", { class: "esc-puntos", "aria-hidden": "true" }, ESCALONES.map(function (x, i) { return el("span", { class: (i === k ? "on" : "") + (x.salto ? " salto" : "") }); }));
+    var ficha = el("section", { class: "ficha arbol-ficha", "aria-live": "polite" }, [
+      el("h3", { texto: (k + 1) + " · " + L(e, "pal") }),
+      el("p", { class: "esc-formula", "data-es-fijo": "", texto: L(e, "f") }),
+      el("p", { "data-es-fijo": "", texto: L(e, "txt") })]);
+    var ch = el("div", { class: "temas-chips" });
+    e.temas.forEach(function (t) { ch.appendChild(el("button", { type: "button", texto: nombreTema(t), on: { click: function () { irTema(t); } } })); });
+    ficha.appendChild(ch);
+    if (e.hito) ficha.appendChild(el("button", { class: "btn sec", type: "button", texto: tx("Verlo en el árbol", "See it in the tree"), on: { click: function () { S.histVista = "arbol"; S.arbol = { sel: e.hito, tema: null }; pintar(); } } }));
+    var nav = el("div", { class: "guia-botones" }, [
+      el("button", { class: "btn sec", type: "button", id: "esc-adentro", disabled: k === 0, texto: tx("← Más adentro", "← Inward"), on: { click: function () { mover(-1); } } }),
+      el("button", { class: "btn", type: "button", id: "esc-afuera", disabled: k === ESCALONES.length - 1, texto: tx("Más afuera →", "Outward →"), on: { click: function () { mover(1); } } })]);
+    v.appendChild(puntos); v.appendChild(nav); v.appendChild(ficha);
+    var REDUCIDO = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches, andando = false;
+    function listo(n) { S.escalon = n; try { sessionStorage.setItem("mh-escalon", String(n)); } catch (e2) {} var m = document.getElementById("main"), y = m.scrollTop; pintar(); m.scrollTop = y; }
+    function mover(d) {
+      var n = k + d; if (n < 0 || n >= ESCALONES.length || andando) return;
+      if (REDUCIDO || !actual.animate) return listo(n);
+      andando = true;
+      var dur = 750, ease = "cubic-bezier(.4,0,.2,1)";
+      var hacia = d > 0 ? ESCALONES[n] : e;   /* el escalón que contiene al otro */
+      if (!hacia.adentro) {   /* salto de tipo: no entra adentro, se reemplaza */
+        var nueva = escena(n); svg.appendChild(nueva);
+        actual.animate([{ transform: "translateX(0px)", opacity: 1 }, { transform: "translateX(" + (-60 * d) + "px)", opacity: 0 }], { duration: dur, easing: ease, fill: "forwards" });
+        nueva.animate([{ transform: "translateX(" + (60 * d) + "px)", opacity: 0 }, { transform: "translateX(0px)", opacity: 1 }], { duration: dur, easing: ease, fill: "forwards" }).onfinish = function () { listo(n); };
+        return;
+      }
+      var a = hacia.adentro, chico = "translate(" + a.x + "px," + a.y + "px) scale(" + a.s + ")", grande = "translate(0px,0px) scale(1)";
+      if (d > 0) {   /* afuera: lo de ahora se achica y queda adentro del siguiente */
+        var sig = escena(n), hueco = sig.querySelector("[data-adentro]"); if (hueco) hueco.style.opacity = 0;
+        sig.style.opacity = 0; svg.insertBefore(sig, actual);
+        actual.style.transformOrigin = "0 0";
+        actual.animate([{ transform: grande }, { transform: chico }], { duration: dur, easing: ease, fill: "forwards" }).onfinish = function () { listo(n); };
+        sig.animate([{ opacity: 0 }, { opacity: 1 }], { duration: dur * 0.7, delay: dur * 0.3, easing: ease, fill: "forwards" });
+      } else {   /* adentro: lo que estaba adentro crece y ocupa todo */
+        var ant = escena(n), hueco2 = actual.querySelector("[data-adentro]"); if (hueco2) hueco2.style.opacity = 0;
+        ant.style.transformOrigin = "0 0"; svg.appendChild(ant);
+        ant.animate([{ transform: chico }, { transform: grande }], { duration: dur, easing: ease, fill: "forwards" }).onfinish = function () { listo(n); };
+        actual.animate([{ opacity: 1 }, { opacity: 0 }], { duration: dur * 0.6, easing: ease, fill: "forwards" });
+      }
+    }
+  }
   /* Enlace directo a practicar un tema (para cerrar un reel con su ejercicio): #tema-<id> */
   function irTema(t) { S.modo = "clase"; S.vista = "practicar"; S.temaFiltro = t; S.leccion = null; S.actual = null; pintar(); document.getElementById("main").scrollTop = 0; }
   function vistaHistoria(v) {
@@ -6186,8 +6327,9 @@ window.MATHLAS_EN = {
     var actual = 1; CAPITULOS.forEach(function (c) { if (abierto[c.n]) actual = c.n; });
     if (GEN) {
       var sw = el("div", { class: "vista-hist", role: "group", "aria-label": "Cómo ver la historia" });
-      [["recorrido", "Recorrido"], ["arbol", "Árbol"]].forEach(function (o) { sw.appendChild(el("button", { type: "button", "aria-pressed": String((S.histVista || "recorrido") === o[0]), texto: o[1], on: { click: function () { S.histVista = o[0]; try { sessionStorage.setItem("mh-hist-vista", o[0]); } catch (e) {} pintar(); } } })); });
+      [["recorrido", "Recorrido"], ["arbol", "Árbol"], ["escalera", "Escalera"]].forEach(function (o) { sw.appendChild(el("button", { type: "button", "aria-pressed": String((S.histVista || "recorrido") === o[0]), texto: o[1], on: { click: function () { S.histVista = o[0]; try { sessionStorage.setItem("mh-hist-vista", o[0]); } catch (e) {} pintar(); } } })); });
       v.appendChild(sw);
+      if (S.histVista === "escalera") return vistaEscalera(v);
       if (S.histVista === "arbol") {
         var domT = {}, ev2 = ev;
         return vistaArbol(v, abierto, function (t) { if (!(t in domT)) domT[t] = MHR.dominado(ev2, t, ahora)[0]; return domT[t]; });
@@ -6353,7 +6495,7 @@ window.MATHLAS_EN = {
     if ((local.paq.generado || "") >= (S.paq.generado || "")) S.paq = local.paq;
   }
   S.movil = leer(LS_INTENTOS) || [];
-  try { var vg = sessionStorage.getItem("mh-vista"); if (vg) S.vista = vg; S.histVista = sessionStorage.getItem("mh-hist-vista") || "recorrido"; } catch (e) {}
+  try { var vg = sessionStorage.getItem("mh-vista"); if (vg) S.vista = vg; S.histVista = sessionStorage.getItem("mh-hist-vista") || "recorrido"; S.escalon = +(sessionStorage.getItem("mh-escalon") || 0); } catch (e) {}
   (function () {  /* la portada solo en la web y solo si no se abrió desde el ícono de inicio; la primera vez, una sola vez */
     var instalada = window.navigator.standalone === true || (window.matchMedia && matchMedia("(display-mode: standalone)").matches), vista = false;
     try { vista = !!sessionStorage.getItem("mh-portada-vista"); } catch (e) {}
